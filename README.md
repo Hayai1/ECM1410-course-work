@@ -1,2 +1,7 @@
-# ECM1410-course-work
-this is the course work for the ECM1410 course "OOP"
+# ECM1410 "object-orientated-programming"
+this is the course work for the course "object-orientated-programming"
+this is a joint project with me Dylan Hough, and Scott Van Windergarden
+
+... description of the project ...
+
+
