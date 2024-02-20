@@ -17,7 +17,8 @@ public class BadCyclingPortalImpl implements CyclingPortal {
 
 	@Override
 	public int[] getRaceIds() {
-		// TODO Auto-generated method stub
+		// TODO Auto-generated method stub\
+		
 		return new int[] {};
 	}
 
