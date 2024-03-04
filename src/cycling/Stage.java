@@ -3,14 +3,18 @@ import java.util.ArrayList;
 import cycling.StageType;
 import java.time.LocalDateTime;
 public class Stage {
-    int ID;
-    String name;
-    String description;
-    ArrayList<CheckPoint> checkPoints;
-    StageType stageType;
-    LocalDateTime startTime;
-    String location;
-    double length;
+
+    
+    private int ID;
+    private String name;
+    private String description;
+    private ArrayList<CheckPoint> checkPoints;
+    private StageType stageType;
+    private LocalDateTime startTime;
+    private String location;
+    private double length;
+
+
     public Stage(int ID, String name, String description, StageType stageType, double length){
         this.ID = ID;
         this.name = name;
