@@ -1,5 +1,5 @@
 package cycling;
-import java.Rider;
+import cycling.Rider;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
