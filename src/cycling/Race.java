@@ -1,9 +1,10 @@
 package cycling;
+import cycling.Rider;
 import java.util.ArrayList;
 import java.util.HashMap;
-
+import java.util.UUID;
 public class Race {
-    private int ID;
+    private UUID ID;
     private String name;
     private String description;
     private HashMap<Rider, Integer> riders;//riders -> points
@@ -11,12 +12,12 @@ public class Race {
     private double length; 
 
     public Race(int id, String name, String description) {
-        ID = id;
+        ID = java.util.UUID.randomUUID();
         this.name = name;
         this.description = description;
     }
 
-    public int getID(){ return ID; }
+    public UUID getID(){ return ID; }
     public String getName() { return name; }
     public String getDescription() { return description; }
     public double getLength() { return length; }
