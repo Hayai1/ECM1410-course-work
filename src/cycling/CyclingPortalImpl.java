@@ -116,11 +116,17 @@ public class CyclingPortalImpl implements CyclingPortal {
 	@Override
 	public int createTeam(String name, String description) throws IllegalNameException, InvalidNameException {
 		if (this.teams.contains(name)) {
-			throw new IllegalNameException();
+			throw new IllegalNameException("illegal name, name already exists");
 		}
-		if (name == null || name.isEmpty() || name.contains(" ")) {
-			throw new InvalidNameException();
-		}	
+		if (name.isEmpty()) {
+			throw new InvalidNameException("Invalid name, name cannot be empty");
+		}
+		if (name == null){
+			throw new IllegalArgumentException("invalid name, Name cannot be null");
+		}
+		if (name.contains(" ")){
+			throw new IllegalArgumentException("invalid name, Name cannot contain spaces");
+		}
 		int id = this.teams.size();
 		Team team = new Team(id, name, description);
 		this.teams.add(team);
@@ -136,7 +142,7 @@ public class CyclingPortalImpl implements CyclingPortal {
 				return;
 			}
 		}
-		throw new IDNotRecognisedException();
+		throw new IDNotRecognisedException("Team not found");
 	}
 
 	@Override
@@ -152,7 +158,16 @@ public class CyclingPortalImpl implements CyclingPortal {
 	@Override
 	public int[] getTeamRiders(int teamId) throws IDNotRecognisedException {
 		// TODO Auto-generated method stub
-		return null;
+		for (Team team : teams) {
+			if (team.getID() == teamId) {
+				int[] riders = new int[team.getRiders().size()];
+				for (int i = 0; i < team.getRiders().size(); i++) {
+					riders[i] = team.getRiders().get(i).getID();
+				}
+				return riders;
+			}
+		}
+		throw new IDNotRecognisedException("Team not found");
 	}
 
 	@Override
