@@ -1,9 +1,10 @@
 package cycling;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-
+import java.util.LinkedList;
 
 /**
  * BadCyclingPortal is a minimally compiling, but non-functioning implementor
@@ -13,7 +14,14 @@ import java.time.LocalTime;
  * @version 2.0
  *
  */
-public class BadCyclingPortalImpl implements CyclingPortal {
+public class CyclingPortalImpl implements CyclingPortal {
+
+	LinkedList<Team> teams;
+	//constructor
+	public CyclingPortalImpl() {
+		// TODO Auto-generated constructor stub
+		teams = new LinkedList<Team>();
+	}
 
 	@Override
 	public int[] getRaceIds() {
@@ -107,8 +115,10 @@ public class BadCyclingPortalImpl implements CyclingPortal {
 
 	@Override
 	public int createTeam(String name, String description) throws IllegalNameException, InvalidNameException {
-		// TODO Auto-generated method stub
-		return 0;
+		int id = this.teams.size();
+		Team team = new Team(id, name, description);
+		this.teams.add(team);
+		return id;
 	}
 
 	@Override
