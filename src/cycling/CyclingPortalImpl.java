@@ -197,7 +197,15 @@ public class CyclingPortalImpl implements CyclingPortal {
 	@Override
 	public void removeRider(int riderId) throws IDNotRecognisedException {
 		// TODO Auto-generated method stub
-
+		for (Team team : teams) {
+			for (Rider rider : team.getRiders()) {
+				if (rider.getID() == riderId) {
+					team.getRiders().remove(rider);
+					return;
+				}
+			}
+		}
+		throw new IDNotRecognisedException("Rider not found");
 	}
 
 	@Override
