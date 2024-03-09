@@ -142,7 +142,11 @@ public class CyclingPortalImpl implements CyclingPortal {
 	@Override
 	public int[] getTeams() {
 		// TODO Auto-generated method stub
-		return null;
+		int[] teams = new int[this.teams.size()];
+		for (int i = 0; i < this.teams.size(); i++) {
+			teams[i] = this.teams.get(i).getID();
+		}
+		return teams;
 	}
 
 	@Override
