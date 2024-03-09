@@ -174,7 +174,24 @@ public class CyclingPortalImpl implements CyclingPortal {
 	public int createRider(int teamID, String name, int yearOfBirth)
 			throws IDNotRecognisedException, IllegalArgumentException {
 		// TODO Auto-generated method stub
-		return 0;
+		for (Team team : teams) {
+			if (team.getID() == teamID) {
+				int id = team.getRiders().size();
+				if (name.isEmpty()) {
+					throw new IllegalArgumentException("Invalid name, name cannot be empty");
+				}
+				else if (name == null){
+					throw new IllegalArgumentException("invalid name, Name cannot be null");
+				}
+				else if (yearOfBirth < 1900){
+					throw new IllegalArgumentException("Invalid year of birth, year of birth must be higher then 1900");
+				}
+				Rider rider = new Rider(id, teamID, name, yearOfBirth);
+				team.addRider(rider);
+				return id;
+			}
+		}
+		throw new IDNotRecognisedException("Team not found");
 	}
 
 	@Override
