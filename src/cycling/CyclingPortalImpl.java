@@ -130,7 +130,13 @@ public class CyclingPortalImpl implements CyclingPortal {
 	@Override
 	public void removeTeam(int teamId) throws IDNotRecognisedException {
 		// TODO Auto-generated method stub
-		
+		for (Team team : teams) {
+			if (team.getID() == teamId) {
+				teams.remove(team);
+				return;
+			}
+		}
+		throw new IDNotRecognisedException();
 	}
 
 	@Override
