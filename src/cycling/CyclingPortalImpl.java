@@ -115,6 +115,12 @@ public class CyclingPortalImpl implements CyclingPortal {
 
 	@Override
 	public int createTeam(String name, String description) throws IllegalNameException, InvalidNameException {
+		if (this.teams.contains(name)) {
+			throw new IllegalNameException();
+		}
+		if (name == null || name.isEmpty() || name.contains(" ")) {
+			throw new InvalidNameException();
+		}	
 		int id = this.teams.size();
 		Team team = new Team(id, name, description);
 		this.teams.add(team);
@@ -124,7 +130,7 @@ public class CyclingPortalImpl implements CyclingPortal {
 	@Override
 	public void removeTeam(int teamId) throws IDNotRecognisedException {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override
