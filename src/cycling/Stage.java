@@ -15,8 +15,8 @@ public class Stage {
     private double length;
 
 
-    public Stage(int ID, String name, String description, StageType stageType, double length){
-        this.ID = ID;
+    public Stage(int id, String name, String description, StageType stageType, double length){
+        ID = id;
         this.name = name;
         this.description = description;
         this.stageType = stageType;
