@@ -26,5 +26,9 @@ public class Race {
     public void setDescription(String description) { this.description = description; }
     public void setLength(double length) { this.length = length; }
 
+    public String getDetails(){     
+        return ID + " " + name + " " + description + " " + stages.size() + " " + length;
+    }
+
 
 }
