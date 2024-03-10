@@ -29,8 +29,10 @@ public class CyclingPortalImpl implements CyclingPortal {
 	@Override
 	public int[] getRaceIds() {
 		// TODO Auto-generated method stub\
-		
-		return new int[] {};
+		int[] raceIds = new int[races.size()];
+		int i = 0;
+		for(Race race: races){raceIds[i++] = race.getID();}
+		return raceIds;
 	}
 
 	@Override
