@@ -32,6 +32,12 @@ public class Race {
     public int getNumberOfStages(){
         return stages.size();
     }
+    public int[] getStageIds(){
+        int[] stageIds = new int[stages.size()];
+        int i = 0;
+        for(Stage stage: stages){stageIds[i++] = stage.getID();}
+        return stageIds;
+    }
 
 
 }
