@@ -29,6 +29,9 @@ public class Race {
     public String getDetails(){     
         return ID + " " + name + " " + description + " " + stages.size() + " " + length;
     }
+    public int getNumberOfStages(){
+        return stages.size();
+    }
 
 
 }
