@@ -1,10 +1,9 @@
 package cycling;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.LinkedList;
+
 
 /**
  * BadCyclingPortal is a minimally compiling, but non-functioning implementor
@@ -14,14 +13,7 @@ import java.util.LinkedList;
  * @version 2.0
  *
  */
-public class CyclingPortalImpl implements CyclingPortal {
-
-	LinkedList<Team> teams;
-	//constructor
-	public CyclingPortalImpl() {
-		// TODO Auto-generated constructor stub
-		teams = new LinkedList<Team>();
-	}
+public class BadCyclingPortalImpl implements CyclingPortal {
 
 	@Override
 	public int[] getRaceIds() {
@@ -115,97 +107,39 @@ public class CyclingPortalImpl implements CyclingPortal {
 
 	@Override
 	public int createTeam(String name, String description) throws IllegalNameException, InvalidNameException {
-		if (this.teams.contains(name)) {
-			throw new IllegalNameException("illegal name, name already exists");
-		}
-		if (name.isEmpty()) {
-			throw new InvalidNameException("Invalid name, name cannot be empty");
-		}
-		if (name == null){
-			throw new IllegalArgumentException("invalid name, Name cannot be null");
-		}
-		if (name.contains(" ")){
-			throw new IllegalArgumentException("invalid name, Name cannot contain spaces");
-		}
-		int id = this.teams.size();
-		Team team = new Team(id, name, description);
-		this.teams.add(team);
-		return id;
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 	@Override
 	public void removeTeam(int teamId) throws IDNotRecognisedException {
 		// TODO Auto-generated method stub
-		for (Team team : teams) {
-			if (team.getID() == teamId) {
-				teams.remove(team);
-				return;
-			}
-		}
-		throw new IDNotRecognisedException("Team not found");
+
 	}
 
 	@Override
 	public int[] getTeams() {
 		// TODO Auto-generated method stub
-		int[] teams = new int[this.teams.size()];
-		for (int i = 0; i < this.teams.size(); i++) {
-			teams[i] = this.teams.get(i).getID();
-		}
-		return teams;
+		return null;
 	}
 
 	@Override
 	public int[] getTeamRiders(int teamId) throws IDNotRecognisedException {
 		// TODO Auto-generated method stub
-		for (Team team : teams) {
-			if (team.getID() == teamId) {
-				int[] riders = new int[team.getRiders().size()];
-				for (int i = 0; i < team.getRiders().size(); i++) {
-					riders[i] = team.getRiders().get(i).getID();
-				}
-				return riders;
-			}
-		}
-		throw new IDNotRecognisedException("Team not found");
+		return null;
 	}
 
 	@Override
 	public int createRider(int teamID, String name, int yearOfBirth)
 			throws IDNotRecognisedException, IllegalArgumentException {
 		// TODO Auto-generated method stub
-		for (Team team : teams) {
-			if (team.getID() == teamID) {
-				int id = team.getRiders().size();
-				if (name.isEmpty()) {
-					throw new IllegalArgumentException("Invalid name, name cannot be empty");
-				}
-				else if (name == null){
-					throw new IllegalArgumentException("invalid name, Name cannot be null");
-				}
-				else if (yearOfBirth < 1900){
-					throw new IllegalArgumentException("Invalid year of birth, year of birth must be higher then 1900");
-				}
-				Rider rider = new Rider(id, teamID, name, yearOfBirth);
-				team.addRider(rider);
-				return id;
-			}
-		}
-		throw new IDNotRecognisedException("Team not found");
+		return 0;
 	}
 
 	@Override
 	public void removeRider(int riderId) throws IDNotRecognisedException {
 		// TODO Auto-generated method stub
-		for (Team team : teams) {
-			for (Rider rider : team.getRiders()) {
-				if (rider.getID() == riderId) {
-					team.getRiders().remove(rider);
-					return;
-				}
-			}
-		}
-		throw new IDNotRecognisedException("Rider not found");
+
 	}
 
 	@Override
