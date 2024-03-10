@@ -17,6 +17,9 @@ import java.util.LinkedList;
 public class CyclingPortalImpl implements CyclingPortal {
 
 	LinkedList<Team> teams;
+	LinkedList<Race> races;
+	private static int idCounter = 0;
+
 	//constructor
 	public CyclingPortalImpl() {
 		// TODO Auto-generated constructor stub
@@ -33,7 +36,18 @@ public class CyclingPortalImpl implements CyclingPortal {
 	@Override
 	public int createRace(String name, String description) throws IllegalNameException, InvalidNameException {
 		// TODO Auto-generated method stub
-		return 0;
+		for (Race race : races) {
+			if (race.getName() == name) {
+				throw new IllegalNameException("illegal name, name already exists");
+			}
+		}
+		if (name.isEmpty() || name == null || name.length() > 30 ||name.contains(" ")) {
+			throw new InvalidNameException("Invalid name, name cannot be null, empty, have more than 30 characters, or have white spaces");
+		}
+		int id = ++idCounter;
+		Race race = new Race(id, name, description);
+		this.races.add(race);
+		return id;
 	}
 
 	@Override
