@@ -317,7 +317,13 @@ public class CyclingPortalImpl implements CyclingPortal {
 	@Override
 	public void removeRaceByName(String name) throws NameNotRecognisedException {
 		// TODO Auto-generated method stub
-
+		for (Race race : races) {
+			if (race.getName() == name) {
+				races.remove(race);
+				return;
+			}
+		}
+		throw new NameNotRecognisedException("Race not found");
 	}
 
 	@Override
