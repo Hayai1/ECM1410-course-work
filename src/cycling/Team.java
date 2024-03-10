@@ -4,18 +4,18 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 public class Team {
-    private UUID ID;
+    private int ID;
     private String name;
     private String description;
     private ArrayList<Rider> Riders;
 
-    public Team( String name, String description) {
-        ID = java.util.UUID.randomUUID();
+    public Team(int id, String name, String description) {
+        ID = id;
         this.name = name;
         this.description = description;
     }
 
-    public UUID getID(){ return ID; }
+    public int getID(){ return ID; }
     public String getName() { return name; }
     public String getDescription() { return description; }
     public ArrayList<Rider> getRiders() { return Riders; }
