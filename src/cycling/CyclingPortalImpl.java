@@ -43,7 +43,7 @@ public class CyclingPortalImpl implements CyclingPortal {
 				throw new IllegalNameException("illegal name, name already exists");
 			}
 		}
-		if (name.isEmpty() || name == null || name.length() > 30 ||name.contains(" ")) {
+		if (name == "" || name == null || name.length() > 30 ||name.contains(" ")) {
 			throw new InvalidNameException("Invalid name, name cannot be null, empty, have more than 30 characters, or have white spaces");
 		}
 		int id = ++idCounter;
@@ -91,8 +91,36 @@ public class CyclingPortalImpl implements CyclingPortal {
 	public int addStageToRace(int raceId, String stageName, String description, double length, LocalDateTime startTime,
 			StageType type)
 			throws IDNotRecognisedException, IllegalNameException, InvalidNameException, InvalidLengthException {
-		// TODO Auto-generated method stub
-		return 0;
+			if (length < 5){ throw new InvalidLengthException("Invalid length, length must be at least 5"); }
+			if (stageName == "") {
+				throw new InvalidNameException("Invalid name, name cannot empty");
+			}
+			else if (stageName == null) {
+				throw new InvalidNameException("Invalid name, name cannot null");
+			}
+			else if (stageName.length() > 30) {
+				throw new InvalidNameException("Invalid name, name cannot be longer than 30 characters");
+			}
+			else if (stageName.contains(" ")) {
+				throw new InvalidNameException("Invalid name, name cannot contain spaces");
+			}
+			for (Race race : races) {
+				if (race.getID() == raceId) {
+					for (Stage stage : race.getStages()) {
+						if (stage.getName() == stageName) {
+							throw new IllegalNameException("illegal name, stage name already exists in this race");
+						}
+					}
+					this.idCounter++;
+					int id = this.idCounter;
+					Stage stage = new Stage(id, stageName, description, type, length, startTime);
+					race.addStage(stage);
+					return id;
+				}
+			}
+			throw new IDNotRecognisedException("race not found");
+
+
 	}
 
 	@Override
@@ -176,7 +204,7 @@ public class CyclingPortalImpl implements CyclingPortal {
 		if (this.teams.contains(name)) {
 			throw new IllegalNameException("illegal name, name already exists");
 		}
-		if (name.isEmpty()) {
+		if (name == "") {
 			throw new InvalidNameException("Invalid name, name cannot be empty");
 		}
 		if (name == null){
@@ -237,7 +265,7 @@ public class CyclingPortalImpl implements CyclingPortal {
 			if (team.getID() == teamID) {
 				this.idCounter++;
 				int id = this.idCounter;
-				if (name.isEmpty()) {
+				if (name == "") {
 					throw new IllegalArgumentException("Invalid name, name cannot be empty");
 				}
 				else if (name == null){
