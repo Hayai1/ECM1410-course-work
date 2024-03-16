@@ -16,7 +16,7 @@ public class Stage {
     private double length;
     private boolean waitingForResults;
 
-    public Stage(int ID, String name, String description, StageType stageType, double length){
+    public Stage(int ID, String name, String description, StageType stageType, double length, LocalDateTime starTime){
         this.ID = ID;
         this.name = name;
         this.description = description;
@@ -25,6 +25,7 @@ public class Stage {
             checkPoints = new LinkedList<CheckPoint>();
         }
         this.length = length;
+        this.startTime = starTime;
     }
 
     public int getID(){ return ID; }
