@@ -1,7 +1,5 @@
 package cycling;
 
-import java.util.UUID;
-
 public class Rider {
     private int ID;
     private int teamID;
