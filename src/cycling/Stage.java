@@ -2,8 +2,6 @@ package cycling;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
 public class Stage {
-
-    
     private int ID;
     private String name;
     private String description;
@@ -14,7 +12,7 @@ public class Stage {
     private double length;
     private boolean waitingForResults;
 
-    public Stage(int ID, String name, String description, StageType stageType, double length, LocalDateTime starTime){
+    public Stage(int ID, String name, String description, StageType stageType, double length, LocalDateTime startTime){
         this.ID = ID;
         this.name = name;
         this.description = description;
@@ -23,7 +21,7 @@ public class Stage {
             checkPoints = new LinkedList<CheckPoint>();
         }
         this.length = length;
-        this.startTime = starTime;
+        this.startTime = startTime;
     }
 
     public int getID(){ return ID; }
