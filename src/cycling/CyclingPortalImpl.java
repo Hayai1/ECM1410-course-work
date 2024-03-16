@@ -136,8 +136,14 @@ public class CyclingPortalImpl implements CyclingPortal {
 
 	@Override
 	public double getStageLength(int stageId) throws IDNotRecognisedException {
-		// TODO Auto-generated method stub
-		return 0;
+		for (Race race : races){
+			for (Stage stage : race.getStages()){
+				if (stage.getID() == stageId){
+					return stage.getLength();
+				}
+			}
+		}
+		throw new IDNotRecognisedException("Stage not found");
 	}
 
 	@Override
