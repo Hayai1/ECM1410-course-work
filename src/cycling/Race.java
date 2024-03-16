@@ -1,8 +1,5 @@
 package cycling;
-import cycling.Rider;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.UUID;
 import java.util.LinkedList;
 
 public class Race {

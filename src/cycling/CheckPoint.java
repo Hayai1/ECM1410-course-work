@@ -1,14 +1,12 @@
 package cycling;
-import java.time.LocalDateTime;
-import cycling.CheckpointType;
-import java.util.UUID;
+
 public class CheckPoint {
     private int ID;
     private int pointsAwarded;
     private double location;
     private double averageGradient;
     private CheckpointType type;
-    public CheckPoint(int id,  CheckpointType type, double length)
+    public CheckPoint(int id,  CheckpointType type, double location)
     {
         this.ID = id;
         this.type = type;

@@ -1,6 +1,4 @@
 package cycling;
-import java.util.ArrayList;
-import cycling.StageType;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
 public class Stage {

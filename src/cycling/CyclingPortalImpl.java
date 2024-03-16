@@ -1,7 +1,6 @@
 package cycling;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.LinkedList;
@@ -111,8 +110,8 @@ public class CyclingPortalImpl implements CyclingPortal {
 							throw new IllegalNameException("illegal name, stage name already exists in this race");
 						}
 					}
-					this.idCounter++;
-					int id = this.idCounter;
+					idCounter++;
+					int id = idCounter;
 					Stage stage = new Stage(id, stageName, description, type, length, startTime);
 					race.addStage(stage);
 					return id;
@@ -174,9 +173,9 @@ public class CyclingPortalImpl implements CyclingPortal {
 					else if (stage.getStageType() == StageType.TT) {
 						throw new InvalidStageTypeException("Invalid stage type, Time trials do not have checkpoints");
 					}
-					this.idCounter++;
-					stage.addCheckPoint(this.idCounter, type, length, averageGradient);
-					return this.idCounter;
+					idCounter++;
+					stage.addCheckPoint(idCounter, type, length, averageGradient);
+					return idCounter;
 				}
 			}
 		}
@@ -188,9 +187,27 @@ public class CyclingPortalImpl implements CyclingPortal {
 	@Override
 	public int addIntermediateSprintToStage(int stageId, double location) throws IDNotRecognisedException,
 			InvalidLocationException, InvalidStageStateException, InvalidStageTypeException {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+		for (Race race : races) {
+			for (Stage stage : race.getStages()) {
+				if (stage.getID() == stageId) {
+					double stageLength = stage.getLength();
+					if (location > stageLength) {
+						throw new InvalidLocationException("Invalid location, outside the bounds of the stage");
+					}
+					else if (stage.getWaitingForResults()) {
+						throw new InvalidStageStateException("Invalid stage state, stage is waiting for results");
+					}
+					else if (stage.getStageType() == StageType.TT) {
+						throw new InvalidStageTypeException("Invalid stage type, Time trials do not have checkpoints");
+					}
+					idCounter++;
+					stage.addCheckPoint(idCounter, CheckpointType.SPRINT, location);
+					return idCounter;
+				}
+			}
+		}
+		throw new IDNotRecognisedException("Stage not found");
+	}	
 
 	@Override
 	public void removeCheckpoint(int checkpointId) throws IDNotRecognisedException, InvalidStageStateException {
@@ -212,8 +229,10 @@ public class CyclingPortalImpl implements CyclingPortal {
 
 	@Override
 	public int createTeam(String name, String description) throws IllegalNameException, InvalidNameException {
-		if (this.teams.contains(name)) {
-			throw new IllegalNameException("illegal name, name already exists");
+		for (Team team : teams) {
+			if (team.getName() == name) {
+				throw new IllegalNameException("illegal name, name already exists");
+			}
 		}
 		if (name == "") {
 			throw new InvalidNameException("Invalid name, name cannot be empty");
@@ -224,8 +243,8 @@ public class CyclingPortalImpl implements CyclingPortal {
 		if (name.contains(" ")){
 			throw new IllegalArgumentException("invalid name, Name cannot contain spaces");
 		}
-		this.idCounter++;
-		int id = this.idCounter;
+		idCounter++;
+		int id = idCounter;
 		Team team = new Team(id, name, description);
 		this.teams.add(team);
 		return id;
@@ -274,8 +293,8 @@ public class CyclingPortalImpl implements CyclingPortal {
 		// TODO Auto-generated method stub
 		for (Team team : teams) {
 			if (team.getID() == teamID) {
-				this.idCounter++;
-				int id = this.idCounter;
+				idCounter++;
+				int id = idCounter;
 				if (name == "") {
 					throw new IllegalArgumentException("Invalid name, name cannot be empty");
 				}
