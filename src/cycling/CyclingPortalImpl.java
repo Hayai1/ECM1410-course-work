@@ -165,7 +165,8 @@ public class CyclingPortalImpl implements CyclingPortal {
 		if (name.contains(" ")){
 			throw new IllegalArgumentException("invalid name, Name cannot contain spaces");
 		}
-		int id = this.teams.size();
+		this.idCounter++;
+		int id = this.idCounter;
 		Team team = new Team(id, name, description);
 		this.teams.add(team);
 		return id;
@@ -214,7 +215,8 @@ public class CyclingPortalImpl implements CyclingPortal {
 		// TODO Auto-generated method stub
 		for (Team team : teams) {
 			if (team.getID() == teamID) {
-				int id = team.getRiders().size();
+				this.idCounter++;
+				int id = this.idCounter;
 				if (name.isEmpty()) {
 					throw new IllegalArgumentException("Invalid name, name cannot be empty");
 				}
