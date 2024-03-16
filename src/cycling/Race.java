@@ -26,5 +26,18 @@ public class Race {
     public void setDescription(String description) { this.description = description; }
     public void setLength(double length) { this.length = length; }
 
+    public String getDetails(){     
+        return ID + " " + name + " " + description + " " + stages.size() + " " + length;
+    }
+    public int getNumberOfStages(){
+        return stages.size();
+    }
+    public int[] getStageIds(){
+        int[] stageIds = new int[stages.size()];
+        int i = 0;
+        for(Stage stage: stages){stageIds[i++] = stage.getID();}
+        return stageIds;
+    }
+
 
 }

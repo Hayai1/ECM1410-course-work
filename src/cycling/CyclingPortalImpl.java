@@ -17,6 +17,9 @@ import java.util.LinkedList;
 public class CyclingPortalImpl implements CyclingPortal {
 
 	LinkedList<Team> teams;
+	LinkedList<Race> races;
+	private static int idCounter = 0;
+
 	//constructor
 	public CyclingPortalImpl() {
 		// TODO Auto-generated constructor stub
@@ -26,32 +29,62 @@ public class CyclingPortalImpl implements CyclingPortal {
 	@Override
 	public int[] getRaceIds() {
 		// TODO Auto-generated method stub\
-		
-		return new int[] {};
+		int[] raceIds = new int[races.size()];
+		int i = 0;
+		for(Race race: races){raceIds[i++] = race.getID();}
+		return raceIds;
 	}
 
 	@Override
 	public int createRace(String name, String description) throws IllegalNameException, InvalidNameException {
 		// TODO Auto-generated method stub
-		return 0;
+		for (Race race : races) {
+			if (race.getName() == name) {
+				throw new IllegalNameException("illegal name, name already exists");
+			}
+		}
+		if (name.isEmpty() || name == null || name.length() > 30 ||name.contains(" ")) {
+			throw new InvalidNameException("Invalid name, name cannot be null, empty, have more than 30 characters, or have white spaces");
+		}
+		int id = ++idCounter;
+		Race race = new Race(id, name, description);
+		this.races.add(race);
+		return id;
 	}
 
 	@Override
 	public String viewRaceDetails(int raceId) throws IDNotRecognisedException {
 		// TODO Auto-generated method stub
-		return null;
+		for (Race race : races) {
+			if (race.getID() == raceId) {
+				return race.getDetails();
+			}
+		}
+		throw new IDNotRecognisedException("Race not found");
 	}
 
 	@Override
 	public void removeRaceById(int raceId) throws IDNotRecognisedException {
 		// TODO Auto-generated method stub
+		for (Race race : races) {
+			if (race.getID() == raceId) {
+				races.remove(race);
+				return;
+			}
+		}
+		throw new IDNotRecognisedException("Race not found");
 
 	}
 
 	@Override
 	public int getNumberOfStages(int raceId) throws IDNotRecognisedException {
 		// TODO Auto-generated method stub
-		return 0;
+		for (Race race : races) {
+			if (race.getID() == raceId) {
+				return race.getNumberOfStages();
+			}
+		}
+		throw new IDNotRecognisedException("Race not found");
 	}
 
 	@Override
@@ -65,7 +98,12 @@ public class CyclingPortalImpl implements CyclingPortal {
 	@Override
 	public int[] getRaceStages(int raceId) throws IDNotRecognisedException {
 		// TODO Auto-generated method stub
-		return null;
+		for (Race race : races) {
+			if (race.getID() == raceId) {
+				return race.getStageIds();
+			}
+		}
+		throw new IDNotRecognisedException("Race not found");
 	}
 
 	@Override
@@ -279,7 +317,13 @@ public class CyclingPortalImpl implements CyclingPortal {
 	@Override
 	public void removeRaceByName(String name) throws NameNotRecognisedException {
 		// TODO Auto-generated method stub
-
+		for (Race race : races) {
+			if (race.getName() == name) {
+				races.remove(race);
+				return;
+			}
+		}
+		throw new NameNotRecognisedException("Race not found");
 	}
 
 	@Override
