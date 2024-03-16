@@ -122,8 +122,28 @@ public class CyclingPortalImpl implements CyclingPortal {
 	public int addCategorizedClimbToStage(int stageId, Double location, CheckpointType type, Double averageGradient,
 			Double length) throws IDNotRecognisedException, InvalidLocationException, InvalidStageStateException,
 			InvalidStageTypeException {
-		// TODO Auto-generated method stub
-		return 0;
+		for (Race race : races) {
+			for (Stage stage : race.getStages()) {
+				if (stage.getID() == stageId) {
+					double stageLength = stage.getLength();
+					if (location > stageLength) {
+						throw new InvalidLocationException("Invalid location, outside the bounds of the stage");
+					}
+					else if (stage.getWaitingForResults()) {
+						throw new InvalidStageStateException("Invalid stage state, stage is waiting for results");
+					}
+					else if (stage.getStageType() == StageType.TT) {
+						throw new InvalidStageTypeException("Invalid stage type, Time trials do not have checkpoints");
+					}
+					this.idCounter++;
+					stage.addCheckPoint(this.idCounter, type, length, averageGradient);
+					return this.idCounter;
+				}
+			}
+		}
+		throw new IDNotRecognisedException("Stage not found");
+
+		
 	}
 
 	@Override
