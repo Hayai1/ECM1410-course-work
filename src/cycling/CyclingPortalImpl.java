@@ -148,8 +148,13 @@ public class CyclingPortalImpl implements CyclingPortal {
 
 	@Override
 	public void removeStageById(int stageId) throws IDNotRecognisedException {
-		// TODO Auto-generated method stub
-
+		for (Race race : races){
+			for (Stage stage : race.getStages()){
+				if (stage.getID() == stageId){
+					race.removeStage(stage);	
+				}
+			}
+		}
 	}
 
 	@Override

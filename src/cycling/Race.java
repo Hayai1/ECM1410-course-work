@@ -32,7 +32,10 @@ public class Race {
     public void addStage(Stage stage){
         stages.add(stage);
     }
-
+    public void removeStage(Stage stage){
+        int i = stages.indexOf(stage);
+        stages.remove(i);
+    }
     public String getDetails(){     
         return ID + " " + name + " " + description + " " + stages.size() + " " + length;
     }
