@@ -1,6 +1,11 @@
 package cycling;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.NotSerializableException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -299,20 +304,49 @@ public class CyclingPortalImpl implements CyclingPortal {
 	@Override
 	public void eraseCyclingPortal() {
 		// TODO Auto-generated method stub
-
+		idCounter = 0;
+		teams = null;
+		races = null;
 	}
 
 	@Override
 	public void saveCyclingPortal(String filename) throws IOException {
 		// TODO Auto-generated method stub
+		try(ObjectOutputStream file= new ObjectOutputStream(new FileOutputStream(filename)))
+    	{
+    	    file.writeObject(teams);
+			file.writeObject(races);
+			file.close();
+    	}
+    	catch(IOException IOerror)
+    	{
+    	    throw new IOException("Error while saving");
+    	}
 
 	}
 
 	@Override
 	public void loadCyclingPortal(String filename) throws IOException, ClassNotFoundException {
-		// TODO Auto-generated method stub
+		// TODO Auto-generated method 
+		teams = null;
+		races = null;
+		try(ObjectInputStream file= new ObjectInputStream(new FileInputStream(filename)))
+    	{
+			@SuppressWarnings("unchecked");
+    	    teams = (LinkedList<Team>) file.readObject();
+			races = (LinkedList<Race>) file.readObject();
+    	}
+    	catch(IOException e)
+    	{
+    	    throw new IOException("Error while saving");
+    	}
+		catch(ClassNotFoundException e)
+    	{
+    	    throw new ClassNotFoundException("Required classes not found in file");
+    	}
 
 	}
+
 
 	@Override
 	public void removeRaceByName(String name) throws NameNotRecognisedException {
