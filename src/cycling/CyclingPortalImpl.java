@@ -217,10 +217,25 @@ public class CyclingPortalImpl implements CyclingPortal {
 
 	@Override
 	public void removeCheckpoint(int checkpointId) throws IDNotRecognisedException, InvalidStageStateException {
-		// TODO Auto-generated method stub
-
+		LinkedList<Stages> stages;
+		LinkedList<CheckPoint> checkpoints;
+		for (Race race : races) {
+			stages = race.getStages();
+			for (Stage stage : stages) {
+				checkpoints = stage.getCheckPoints();
+				for (CheckPoint checkpoint : checkpoints) {
+					if (checkpoint.getID() == checkpointId) {
+						if (stage.getWaitingForResults()) {
+							throw new InvalidStageStateException("Invalid stage state, stage is waiting for results");
+						}
+						checkpoints.remove(checkpoint);
+					}
+				}
+			}
+		}
+		throw new IDNotRecognisedException("Checkpoint not found");
 	}
-
+	
 	@Override
 	public void concludeStagePreparation(int stageId) throws IDNotRecognisedException, InvalidStageStateException {
 		// TODO Auto-generated method stub
@@ -229,8 +244,21 @@ public class CyclingPortalImpl implements CyclingPortal {
 
 	@Override
 	public int[] getStageCheckpoints(int stageId) throws IDNotRecognisedException {
-		// TODO Auto-generated method stub
-		return null;
+		LinkedList<Stages> stages;
+		LinkedList<CheckPoint> checkpoints;
+		LinkedList<Integer> checkpointIds = new LinkedList<Integer>();
+		for (Race race : races) {
+			stages = race.getStages();
+			for (Stage stage : stages) {
+				if (stage.getID() == stageId) {
+					checkpoints = stage.getCheckPoints();
+					for (CheckPoint checkpoint : checkpoints) {
+						checkpointIds.add(checkpoint.getID());
+					}
+					return checkpointIds.toArray();
+			}
+		}
+		throw new IDNotRecognisedException("stage not found");
 	}
 
 	@Override

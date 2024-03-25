@@ -32,6 +32,7 @@ public class Stage {
     public double getLength(){ return length; }
     public boolean getWaitingForResults(){ return waitingForResults; }
     public StageType getStageType(){ return stageType; }
+    public LinkedList<CheckPoint> getCheckPoints(){ return checkPoints; }
     
     public void setWaitingForResults(boolean waitingForResults){ this.waitingForResults = waitingForResults; }
     public void addCheckPoint(int ID, CheckpointType type, double length){ checkPoints.add(new CheckPoint(ID, type, length)); }
