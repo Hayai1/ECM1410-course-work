@@ -1,4 +1,11 @@
 package cycling;
+
+import cycling.Rider;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -41,6 +48,7 @@ public class Race {
     }
     public int[] getStageIds(){
         int[] stageIds = new int[stages.size()];
+        Collections.sort(stages, Comparator.comparing(Stage::getStartTime));
         int i = 0;
         for(Stage stage: stages){stageIds[i++] = stage.getID();}
         return stageIds;
