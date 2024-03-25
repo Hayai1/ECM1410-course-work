@@ -2,9 +2,7 @@ package cycling;
 import java.util.ArrayList;
 import cycling.StageType;
 import java.time.LocalDateTime;
-public class Stage {
-
-    
+public class Stage implements java.io.Serializable{
     private int ID;
     private String name;
     private String description;

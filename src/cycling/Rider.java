@@ -2,7 +2,7 @@ package cycling;
 
 import java.util.UUID;
 
-public class Rider {
+public class Rider implements java.io.Serializable{
     private int ID;
     private int teamID;
     private String name;

@@ -332,7 +332,6 @@ public class CyclingPortalImpl implements CyclingPortal {
 		races = null;
 		try(ObjectInputStream file= new ObjectInputStream(new FileInputStream(filename)))
     	{
-			@SuppressWarnings("unchecked");
     	    teams = (LinkedList<Team>) file.readObject();
 			races = (LinkedList<Race>) file.readObject();
     	}

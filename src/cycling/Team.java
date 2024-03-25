@@ -3,7 +3,7 @@ package cycling;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class Team {
+public class Team implements java.io.Serializable{
     private int ID;
     private String name;
     private String description;

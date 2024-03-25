@@ -3,7 +3,7 @@ import cycling.Rider;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
-public class Race {
+public class Race implements java.io.Serializable{
     private int ID;
     private String name;
     private String description;
