@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -13,6 +14,7 @@ public class Stage implements java.io.Serializable{
     private String description;
     private ArrayList<CheckPoint> checkPoints;
     private StageType stageType;
+    private int[] pointsAwarded;
     private LocalDateTime startTime;
     private String location;
     private Double length;
@@ -24,6 +26,26 @@ public class Stage implements java.io.Serializable{
         this.name = name;
         this.description = description;
         this.stageType = stageType;
+        switch (stageType) {
+            case FLAT:
+                int[] flatPoints = {50,30,20,15,16,16,14,12,10,8,7,6,5,4,3,2};
+                pointsAwarded = flatPoints;
+                break;
+            case MEDIUM_MOUNTAIN:
+                int[] mediumPoints = {30,25,22,19,17,15,13,11,9,7,6,5,4,3,2};
+                pointsAwarded = mediumPoints;
+                break;
+            case HIGH_MOUNTAIN:
+                int[] highPoints = {20,17,15,13,11,10,9,8,7,6,5,4,3,2,1};
+                pointsAwarded = highPoints;
+                break;
+            case TT:
+                int[] trialPoints = {20,17,15,13,11,10,9,8,7,6,5,4,3,2,1};
+                pointsAwarded = trialPoints;
+                break;
+            default:
+                break;
+        }
         if (stageType != StageType.TT){
             checkPoints = new ArrayList<CheckPoint>();
         }
@@ -93,7 +115,6 @@ public class Stage implements java.io.Serializable{
                     //swap
                     int elapsedTimeTemp = elapsedTimeSecondsList[i];
                     int riderIDTemp = riderIDs[i];
-
                     elapsedTimeSecondsList[i] = elapsedTimeSecondsList[i-1];
                     riderIDs[i] = riderIDs[i-1];
                     elapsedTimeSecondsList[i-1] = elapsedTimeTemp;
@@ -106,17 +127,68 @@ public class Stage implements java.io.Serializable{
     }
     public int[] getPointsInTimeOrder(){
         int[] points = new int[times.size()];
-        CheckPoint currentCheckPoint;
-        for (int checkPointPos = 1; checkPointPos < checkPoints.size(); checkPointPos++){
-            currentCheckPoint = checkPoints.get(checkPointPos);
-            //good luck scott
+        Arrays.fill(points, 0);
+        int[] currentCheckPoint;
+        for (int checkPointPos = 1; checkPointPos <= checkPoints.size(); checkPointPos++){
             //get the points needed e.g. [50, 40, 30, 20] 1st 2nd 3rd
-            //make currentechpoint times into an array
+            currentCheckPoint = checkPoints.get(checkPointPos).getPointsAwarded();
+            //make currentcheckpoint times into an array
+            long[] checkPointTimes = new long[times.size()];
+            int counter =0;
+            for (int ID : times.keySet()){
+                checkPointTimes[counter++] =  times.get(ID)[0].until(times.get(ID)[checkPointPos], ChronoUnit.SECONDS);
+            }
             //find who's first put in appropriate position in points array and repeat
-            //then do it for the next checkpoint
-
+            for (int placePoints: currentCheckPoint){
+                long earliestFinish = Arrays.stream(checkPointTimes).min().getAsLong();
+                if (earliestFinish != 0) {
+                    for (int i = 0; i < checkPointTimes.length; i++){
+                        points[i] += placePoints;
+                        checkPointTimes[i] = 0;
+                    }
+                }
+            }
+        }
+        //for last checkpoint/end of stage
+        long[] checkPointTimes = new long[times.size()];
+        int counter = 0;
+        for (int ID : times.keySet()){
+            checkPointTimes[counter++] =  times.get(ID)[0].until(times.get(ID)[times.get(ID).length], ChronoUnit.SECONDS);
+        }
+        for (int placePoints: pointsAwarded){
+            long earliestFinish = Arrays.stream(checkPointTimes).min().getAsLong();
+            if (earliestFinish != 0) {
+                for (int i = 0; i < checkPointTimes.length; i++){
+                    points[i] += placePoints;
+                    checkPointTimes[i] = 0;
+                }
+            }
         }
         //sort points by elapsed time and return
+        int[] elapsedTimeSecondsList = new int[times.size()];
+        counter = 0;
+        for (int ID : times.keySet()){
+            LocalTime[] riderTimes = times.get(ID);
+            Long elapsedTimeSeconds = riderTimes[0].until(riderTimes[riderTimes.length], ChronoUnit.SECONDS);
+            elapsedTimeSecondsList[counter++] = elapsedTimeSeconds.intValue();
+        }
+        Boolean sorting = false;
+        while (sorting){
+            sorting = false;
+            for (int i =1; i <= elapsedTimeSecondsList.length; i++){
+                if (elapsedTimeSecondsList[i] < elapsedTimeSecondsList[i-1]){
+                    //swap
+                    int elapsedTimeTemp = elapsedTimeSecondsList[i];
+                    int riderIDTemp = points[i];
+                    elapsedTimeSecondsList[i] = elapsedTimeSecondsList[i-1];
+                    points[i] = points[i-1];
+                    elapsedTimeSecondsList[i-1] = elapsedTimeTemp;
+                    points[i-1] = riderIDTemp;
+                    sorting = true;
+                }
+            }
+        }
+        return points;
     }
 
 
