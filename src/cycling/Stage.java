@@ -1,7 +1,6 @@
 package cycling;
 import java.time.LocalDateTime;
-import java.util.LinkedList;
-public class Stage {
+public class Stage implements java.io.Serializable{
     private int ID;
     private String name;
     private String description;

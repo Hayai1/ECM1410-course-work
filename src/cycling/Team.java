@@ -1,7 +1,7 @@
 package cycling;
 import java.util.LinkedList;
 
-public class Team {
+public class Team implements java.io.Serializable{
     private int ID;
     private String name;
     private String description;

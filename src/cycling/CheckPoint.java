@@ -1,6 +1,8 @@
 package cycling;
-
-public class CheckPoint {
+import java.time.LocalDateTime;
+import cycling.CheckpointType;
+import java.util.UUID;
+public class CheckPoint implements java.io.Serializable{
     private int ID;
     private int pointsAwarded;
     private double location;

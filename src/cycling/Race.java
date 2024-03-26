@@ -6,10 +6,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
-import java.util.LinkedList;
-
-public class Race {
+public class Race implements java.io.Serializable{
     private int ID;
     private String name;
     private String description;
