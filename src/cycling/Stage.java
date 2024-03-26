@@ -102,9 +102,21 @@ public class Stage implements java.io.Serializable{
                 }
             }
         }
-
-    
         return riderIDs;
+    }
+    public int[] getPointsInTimeOrder(){
+        int[] points = new int[times.size()];
+        CheckPoint currentCheckPoint;
+        for (int checkPointPos = 1; checkPointPos < checkPoints.size(); checkPointPos++){
+            currentCheckPoint = checkPoints.get(checkPointPos);
+            //good luck scott
+            //get the points needed e.g. [50, 40, 30, 20] 1st 2nd 3rd
+            //make currentechpoint times into an array
+            //find who's first put in appropriate position in points array and repeat
+            //then do it for the next checkpoint
+
+        }
+        //sort points by elapsed time and return
     }
 
 
