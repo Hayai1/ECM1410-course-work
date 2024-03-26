@@ -28,7 +28,6 @@ public class Race {
  
     public void setName(String name) { this.name = name; }
     public void setDescription(String description) { this.description = description; }
-    public void setLength(double length) { this.length = length; }
 
     public void addStage(Stage stage){
         stages.add(stage);
