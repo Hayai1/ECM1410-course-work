@@ -106,6 +106,7 @@ public class Stage implements java.io.Serializable{
         for (int ID : times.keySet()){
             LocalTime[] riderTimes = times.get(ID);
             Long elapsedTimeSeconds = riderTimes[0].until(riderTimes[riderTimes.length], ChronoUnit.SECONDS);
+            riderIDs[counter] = ID;
             elapsedTimeSecondsList[counter++] = elapsedTimeSeconds.intValue();
         }
         while (sorting){
