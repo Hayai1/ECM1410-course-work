@@ -99,32 +99,12 @@ public class Stage implements java.io.Serializable{
         return riderTimes;
     }    
     public int[] getLeaderBoard(){
-        Boolean sorting = true; 
-        int[] elapsedTimeSecondsList = new int[times.size()];
         int[] riderIDs = new int[times.size()];
         int counter = 0;
         for (int ID : times.keySet()){
-            LocalTime[] riderTimes = times.get(ID);
-            Long elapsedTimeSeconds = riderTimes[0].until(riderTimes[riderTimes.length], ChronoUnit.SECONDS);
-            riderIDs[counter] = ID;
-            elapsedTimeSecondsList[counter++] = elapsedTimeSeconds.intValue();
+            riderIDs[counter++] = ID;
         }
-        while (sorting){
-            sorting = false;
-            for (int i =1; i <= elapsedTimeSecondsList.length; i++){
-                if (elapsedTimeSecondsList[i] < elapsedTimeSecondsList[i-1]){
-                    //swap
-                    int elapsedTimeTemp = elapsedTimeSecondsList[i];
-                    int riderIDTemp = riderIDs[i];
-                    elapsedTimeSecondsList[i] = elapsedTimeSecondsList[i-1];
-                    riderIDs[i] = riderIDs[i-1];
-                    elapsedTimeSecondsList[i-1] = elapsedTimeTemp;
-                    riderIDs[i-1] = riderIDTemp;
-                    sorting = true;
-                }
-            }
-        }
-        return riderIDs;
+        return sortBasedOnElapsedTime(riderIDs);
     }
     public int[] getPointsInTimeOrder(){
         int[] points = new int[times.size()];
@@ -166,30 +146,34 @@ public class Stage implements java.io.Serializable{
             }
         }
         //sort points by elapsed time and return
+        return sortBasedOnElapsedTime(points);
+    }
+    private int[] sortBasedOnElapsedTime(int[] inputArray){
         int[] elapsedTimeSecondsList = new int[times.size()];
-        counter = 0;
+        int counter = 0;
         for (int ID : times.keySet()){
             LocalTime[] riderTimes = times.get(ID);
             Long elapsedTimeSeconds = riderTimes[0].until(riderTimes[riderTimes.length], ChronoUnit.SECONDS);
             elapsedTimeSecondsList[counter++] = elapsedTimeSeconds.intValue();
         }
-        Boolean sorting = false;
+        Boolean sorting = true;
         while (sorting){
             sorting = false;
             for (int i =1; i <= elapsedTimeSecondsList.length; i++){
                 if (elapsedTimeSecondsList[i] < elapsedTimeSecondsList[i-1]){
                     //swap
                     int elapsedTimeTemp = elapsedTimeSecondsList[i];
-                    int riderIDTemp = points[i];
+                    int riderIDTemp = inputArray[i];
                     elapsedTimeSecondsList[i] = elapsedTimeSecondsList[i-1];
-                    points[i] = points[i-1];
+                    inputArray[i] = inputArray[i-1];
                     elapsedTimeSecondsList[i-1] = elapsedTimeTemp;
-                    points[i-1] = riderIDTemp;
+                    inputArray[i-1] = riderIDTemp;
                     sorting = true;
                 }
             }
         }
-        return points;
+
+        return inputArray;
     }
 
 
