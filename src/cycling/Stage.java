@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.HashMap;
 public class Stage implements java.io.Serializable{
     private int ID;
@@ -12,7 +11,7 @@ public class Stage implements java.io.Serializable{
     private String description;
     private ArrayList<CheckPoint> checkPoints;
     private StageType stageType;
-    private LocalTime startTime;
+    private LocalDateTime startTime;
     private String location;
     private Double length;
     private Boolean waitingForResults;
@@ -35,7 +34,7 @@ public class Stage implements java.io.Serializable{
     public String getName(){ return name; } 
     public String getDescription(){ return description; }
     public String getStageLocation(){ return location; }
-    public LocalTime getStartTime(){ return startTime; }
+    public LocalDateTime getStartTime(){ return startTime; }
     public double getLength(){ return length; }
     public boolean getWaitingForResults(){ return waitingForResults; }
     public StageType getStageType(){ return stageType; }
@@ -68,7 +67,7 @@ public class Stage implements java.io.Serializable{
     public LocalTime[] getRiderTimesAndEllapsed(int ID)
     {
         LocalTime[] riderTimes = times.get(ID);
-        Long elapsedTimeSeconds = times[0].until(times[times.length], ChronoUnit.SECONDS);
+        Long elapsedTimeSeconds = riderTimes[0].until(riderTimes[riderTimes.length], ChronoUnit.SECONDS);
         SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
         String elapsedTimeSDF = df.format(elapsedTimeSeconds);
         LocalTime elapsedTime = LocalTime.parse(elapsedTimeSDF);
