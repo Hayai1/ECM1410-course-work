@@ -42,7 +42,7 @@ public class Race {
         return length; 
     }
     public String getDetails(){     
-        return ID + " " + name + " " + description + " " + stages.size() + " " + length;
+        return ID + " " + name + " " + description + " " + stages.size() + " " + getLength();
     }
     public int getNumberOfStages(){
         return stages.size();
