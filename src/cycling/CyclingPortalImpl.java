@@ -9,7 +9,7 @@ import java.io.ObjectOutputStream;
 import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 /**
  * BadCyclingPortal is a minimally compiling, but non-functioning implementor
@@ -21,14 +21,15 @@ import java.util.LinkedList;
  */
 public class CyclingPortalImpl implements CyclingPortal {
 
-	LinkedList<Team> teams;
-	LinkedList<Race> races;
+	ArrayList<Team> teams;
+	ArrayList<Race> races;
 	private static int idCounter = 0;
 
 	//constructor
 	public CyclingPortalImpl() {
 		// TODO Auto-generated constructor stub
-		teams = new LinkedList<Team>();
+		teams = new ArrayList<Team>();
+		races = new ArrayList<Race>();
 	}
 
 	@Override
@@ -406,17 +407,20 @@ public class CyclingPortalImpl implements CyclingPortal {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void loadCyclingPortal(String filename) throws IOException, ClassNotFoundException {
 		// TODO Auto-generated method 
 		teams = null;
 		races = null;
 		try(ObjectInputStream file= new ObjectInputStream(new FileInputStream(filename)))
-    	{
-			@SuppressWarnings("unchecked");
-    	    teams = (LinkedList<Team>) file.readObject();
-			races = (LinkedList<Race>) file.readObject();
-    	}
+		{
+			Object teamData = file.readObject();
+			Object raceData = file.readObject();
+
+			teams = (ArrayList<Team>) teamData;
+			races = (ArrayList<Race>) raceData;
+		}
     	catch(IOException e)
     	{
     	    throw new IOException("Error while saving");
