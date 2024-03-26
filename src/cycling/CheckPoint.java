@@ -13,32 +13,7 @@ public class CheckPoint implements java.io.Serializable{
         this.ID = id;
         this.type = type;
         this.location = location;
-        switch (type) {
-            case SPRINT:
-                int[] sprintPoints = {20,17,15,13,11,10,9,8,7,6,5,4,3,2,1};
-                this.pointsAwarded = sprintPoints;
-                break;
-            case C4:
-                int[] cat4Points = {1};
-                this.pointsAwarded = cat4Points;
-                break;
-            case C3:
-                int[] cat3Points = {2,1};
-                this.pointsAwarded = cat3Points;
-                break;
-            case C2:
-                int[] cat2Points = {5,3,2,1};
-                this.pointsAwarded = cat2Points;
-                break;
-            case C1:
-                int[] cat1Points = {10,8,6,4,2,1};
-                this.pointsAwarded = cat1Points;
-                break;
-            default:
-                int[] eXtremePoints = {20,15,12,10,8,6,4,2};
-                this.pointsAwarded = eXtremePoints;
-                break;
-        }
+        this.pointsAwarded = setPointsAwarded(type);
     }
 
     public CheckPoint(int id,  CheckpointType type, double location, double averageGradient)
@@ -47,34 +22,32 @@ public class CheckPoint implements java.io.Serializable{
         this.type = type;
         this.location = location;
         this.averageGradient = averageGradient;
+        this.pointsAwarded = setPointsAwarded(type);
+    }
+    private int[] setPointsAwarded(CheckpointType type){
         switch (type) {
             case SPRINT:
                 int[] sprintPoints = {20,17,15,13,11,10,9,8,7,6,5,4,3,2,1};
-                this.pointsAwarded = sprintPoints;
-                break;
+                return sprintPoints;
             case C4:
                 int[] cat4Points = {1};
-                this.pointsAwarded = cat4Points;
-                break;
+                return cat4Points;
             case C3:
                 int[] cat3Points = {2,1};
-                this.pointsAwarded = cat3Points;
-                break;
+                return cat3Points;
             case C2:
                 int[] cat2Points = {5,3,2,1};
-                this.pointsAwarded = cat2Points;
-                break;
+                return cat2Points;
             case C1:
                 int[] cat1Points = {10,8,6,4,2,1};
-                this.pointsAwarded = cat1Points;
-                break;
+                return cat1Points;
             default:
                 int[] eXtremePoints = {20,15,12,10,8,6,4,2};
-                this.pointsAwarded = eXtremePoints;
-                break;
+                return eXtremePoints;
         }
+
     }
-    
+
     public int getID(){ return ID; }
     public double getStageLocation(){ return location; }
     public double getAverageGradient(){ return averageGradient; }
