@@ -13,9 +13,7 @@ public class Race {
     private int ID;
     private String name;
     private String description;
-    private HashMap<Rider, Integer> riders;//riders -> points
     private LinkedList<Stage> stages;
-    private double length; 
 
     public Race(int id, String name, String description) {
         ID = id;
@@ -26,12 +24,10 @@ public class Race {
     public int getID(){ return ID; }
     public String getName() { return name; }
     public String getDescription() { return description; }
-    public double getLength() { return length; }
     public LinkedList<Stage> getStages() { return stages; }
  
     public void setName(String name) { this.name = name; }
     public void setDescription(String description) { this.description = description; }
-    public void setLength(double length) { this.length = length; }
 
     public void addStage(Stage stage){
         stages.add(stage);
@@ -40,8 +36,13 @@ public class Race {
         int i = stages.indexOf(stage);
         stages.remove(i);
     }
+    public double getLength(){ 
+        double length = 0;
+        for(Stage stage: stages){length =+ stage.getLength();} 
+        return length; 
+    }
     public String getDetails(){     
-        return ID + " " + name + " " + description + " " + stages.size() + " " + length;
+        return ID + " " + name + " " + description + " " + stages.size() + " " + getLength();
     }
     public int getNumberOfStages(){
         return stages.size();
