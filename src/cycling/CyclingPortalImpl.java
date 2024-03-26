@@ -9,7 +9,7 @@ import java.io.ObjectOutputStream;
 import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 /**
  * BadCyclingPortal is a minimally compiling, but non-functioning implementor
@@ -21,14 +21,15 @@ import java.util.LinkedList;
  */
 public class CyclingPortalImpl implements CyclingPortal {
 
-	LinkedList<Team> teams;
-	LinkedList<Race> races;
+	ArrayList<Team> teams;
+	ArrayList<Race> races;
 	private static int idCounter = 0;
 
 	//constructor
 	public CyclingPortalImpl() {
 		// TODO Auto-generated constructor stub
-		teams = new LinkedList<Team>();
+		teams = new ArrayList<Team>();
+		races = new ArrayList<Race>();
 	}
 
 	@Override
@@ -48,7 +49,7 @@ public class CyclingPortalImpl implements CyclingPortal {
 				throw new IllegalNameException("illegal name, name already exists");
 			}
 		}
-		if (name.isEmpty() || name == null || name.length() > 30 ||name.contains(" ")) {
+		if (name == "" || name == null || name.length() > 30 ||name.contains(" ")) {
 			throw new InvalidNameException("Invalid name, name cannot be null, empty, have more than 30 characters, or have white spaces");
 		}
 		int id = ++idCounter;
@@ -96,8 +97,36 @@ public class CyclingPortalImpl implements CyclingPortal {
 	public int addStageToRace(int raceId, String stageName, String description, double length, LocalDateTime startTime,
 			StageType type)
 			throws IDNotRecognisedException, IllegalNameException, InvalidNameException, InvalidLengthException {
-		// TODO Auto-generated method stub
-		return 0;
+			if (length < 5){ throw new InvalidLengthException("Invalid length, length must be at least 5"); }
+			if (stageName == "") {
+				throw new InvalidNameException("Invalid name, name cannot empty");
+			}
+			else if (stageName == null) {
+				throw new InvalidNameException("Invalid name, name cannot null");
+			}
+			else if (stageName.length() > 30) {
+				throw new InvalidNameException("Invalid name, name cannot be longer than 30 characters");
+			}
+			else if (stageName.contains(" ")) {
+				throw new InvalidNameException("Invalid name, name cannot contain spaces");
+			}
+			for (Race race : races) {
+				if (race.getID() == raceId) {
+					for (Stage stage : race.getStages()) {
+						if (stage.getName() == stageName) {
+							throw new IllegalNameException("illegal name, stage name already exists in this race");
+						}
+					}
+					idCounter++;
+					int id = idCounter;
+					Stage stage = new Stage(id, stageName, description, type, length, startTime);
+					race.addStage(stage);
+					return id;
+				}
+			}
+			throw new IDNotRecognisedException("race not found");
+
+
 	}
 
 	@Override
@@ -113,30 +142,79 @@ public class CyclingPortalImpl implements CyclingPortal {
 
 	@Override
 	public double getStageLength(int stageId) throws IDNotRecognisedException {
-		// TODO Auto-generated method stub
-		return 0;
+		for (Race race : races){
+			for (Stage stage : race.getStages()){
+				if (stage.getID() == stageId){
+					return stage.getLength();
+				}
+			}
+		}
+		throw new IDNotRecognisedException("Stage not found");
 	}
 
 	@Override
 	public void removeStageById(int stageId) throws IDNotRecognisedException {
-		// TODO Auto-generated method stub
-
+		for (Race race : races){
+			for (Stage stage : race.getStages()){
+				if (stage.getID() == stageId){
+					race.removeStage(stage);	
+				}
+			}
+		}
 	}
 
 	@Override
 	public int addCategorizedClimbToStage(int stageId, Double location, CheckpointType type, Double averageGradient,
 			Double length) throws IDNotRecognisedException, InvalidLocationException, InvalidStageStateException,
 			InvalidStageTypeException {
-		// TODO Auto-generated method stub
-		return 0;
+		for (Race race : races) {
+			for (Stage stage : race.getStages()) {
+				if (stage.getID() == stageId) {
+					double stageLength = stage.getLength();
+					if (location > stageLength) {
+						throw new InvalidLocationException("Invalid location, outside the bounds of the stage");
+					}
+					else if (stage.getWaitingForResults()) {
+						throw new InvalidStageStateException("Invalid stage state, stage is waiting for results");
+					}
+					else if (stage.getStageType() == StageType.TT) {
+						throw new InvalidStageTypeException("Invalid stage type, Time trials do not have checkpoints");
+					}
+					idCounter++;
+					stage.addCheckPoint(idCounter, type, length, averageGradient);
+					return idCounter;
+				}
+			}
+		}
+		throw new IDNotRecognisedException("Stage not found");
+
+		
 	}
 
 	@Override
 	public int addIntermediateSprintToStage(int stageId, double location) throws IDNotRecognisedException,
 			InvalidLocationException, InvalidStageStateException, InvalidStageTypeException {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+		for (Race race : races) {
+			for (Stage stage : race.getStages()) {
+				if (stage.getID() == stageId) {
+					double stageLength = stage.getLength();
+					if (location > stageLength) {
+						throw new InvalidLocationException("Invalid location, outside the bounds of the stage");
+					}
+					else if (stage.getWaitingForResults()) {
+						throw new InvalidStageStateException("Invalid stage state, stage is waiting for results");
+					}
+					else if (stage.getStageType() == StageType.TT) {
+						throw new InvalidStageTypeException("Invalid stage type, Time trials do not have checkpoints");
+					}
+					idCounter++;
+					stage.addCheckPoint(idCounter, CheckpointType.SPRINT, location);
+					return idCounter;
+				}
+			}
+		}
+		throw new IDNotRecognisedException("Stage not found");
+	}	
 
 	@Override
 	public void removeCheckpoint(int checkpointId) throws IDNotRecognisedException, InvalidStageStateException {
@@ -158,10 +236,12 @@ public class CyclingPortalImpl implements CyclingPortal {
 
 	@Override
 	public int createTeam(String name, String description) throws IllegalNameException, InvalidNameException {
-		if (this.teams.contains(name)) {
-			throw new IllegalNameException("illegal name, name already exists");
+		for (Team team : teams) {
+			if (team.getName() == name) {
+				throw new IllegalNameException("illegal name, name already exists");
+			}
 		}
-		if (name.isEmpty()) {
+		if (name == "") {
 			throw new InvalidNameException("Invalid name, name cannot be empty");
 		}
 		if (name == null){
@@ -170,7 +250,8 @@ public class CyclingPortalImpl implements CyclingPortal {
 		if (name.contains(" ")){
 			throw new IllegalArgumentException("invalid name, Name cannot contain spaces");
 		}
-		int id = this.teams.size();
+		idCounter++;
+		int id = idCounter;
 		Team team = new Team(id, name, description);
 		this.teams.add(team);
 		return id;
@@ -219,8 +300,9 @@ public class CyclingPortalImpl implements CyclingPortal {
 		// TODO Auto-generated method stub
 		for (Team team : teams) {
 			if (team.getID() == teamID) {
-				int id = team.getRiders().size();
-				if (name.isEmpty()) {
+				idCounter++;
+				int id = idCounter;
+				if (name == "") {
 					throw new IllegalArgumentException("Invalid name, name cannot be empty");
 				}
 				else if (name == null){
@@ -325,16 +407,18 @@ public class CyclingPortalImpl implements CyclingPortal {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void loadCyclingPortal(String filename) throws IOException, ClassNotFoundException {
 		// TODO Auto-generated method 
 		teams = null;
 		races = null;
 		try(ObjectInputStream file= new ObjectInputStream(new FileInputStream(filename)))
-    	{
-    	    teams = (LinkedList<Team>) file.readObject();
-			races = (LinkedList<Race>) file.readObject();
-    	}
+			Object teamData = file.readObject();
+			Object raceData = file.readObject();
+
+			teams = (ArrayList<Team>) teamData;
+			races = (ArrayList<Race>) raceData;
     	catch(IOException e)
     	{
     	    throw new IOException("Error while saving");

@@ -1,13 +1,11 @@
 package cycling;
-
-import java.util.ArrayList;
-import java.util.UUID;
+import java.util.LinkedList;
 
 public class Team implements java.io.Serializable{
     private int ID;
     private String name;
     private String description;
-    private ArrayList<Rider> Riders;
+    private LinkedList<Rider> Riders;
 
     public Team(int id, String name, String description) {
         ID = id;
@@ -18,7 +16,7 @@ public class Team implements java.io.Serializable{
     public int getID(){ return ID; }
     public String getName() { return name; }
     public String getDescription() { return description; }
-    public ArrayList<Rider> getRiders() { return Riders; }
+    public LinkedList<Rider> getRiders() { return Riders; }
 
     public void setName(String name) { this.name = name; }
     public void setDescription(String description) { this.description = description; }
