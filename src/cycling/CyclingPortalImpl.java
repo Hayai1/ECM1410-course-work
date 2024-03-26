@@ -337,7 +337,37 @@ public class CyclingPortalImpl implements CyclingPortal {
 	public void registerRiderResultsInStage(int stageId, int riderId, LocalTime... checkpoints)
 			throws IDNotRecognisedException, DuplicatedResultException, InvalidCheckpointTimesException,
 			InvalidStageStateException {
-		// TODO Auto-generated method stub
+				Boolean riderFound = false;
+				for (Team team : teams) {
+					for (Rider rider : team.getRiders()) {
+						if (rider.getID() == riderId) {
+							riderFound = true;
+						}
+					}
+				}
+				if (!riderFound){
+					throw new IDNotRecognisedException("Rider not found");
+				}
+				for (Race race : races) {
+					for (Stage stage : race.getStages()) {
+						if (stage.getID() == stageId) {
+							stageFound = true;
+							String error = stage.addRiderTimes(riderId, checkpoints);
+							switch (error){
+								case "duplicate error":
+									throw new DuplicatedResultException(error);
+								case "checkpoint amount error":
+									throw new InvalidCheckpointTimesException(error);
+								case "not waiting for results":
+									throw new InvalidStageStateException(error);
+								}
+							return;
+						}
+					}
+				}
+				throw new IDNotRecognisedException("Stage not found");
+				
+
 
 	}
 
