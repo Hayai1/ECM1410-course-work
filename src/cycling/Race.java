@@ -13,7 +13,6 @@ public class Race {
     private int ID;
     private String name;
     private String description;
-    private HashMap<Rider, Integer> riders;//riders -> points
     private LinkedList<Stage> stages;
 
     public Race(int id, String name, String description) {
