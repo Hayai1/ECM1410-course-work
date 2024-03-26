@@ -9,6 +9,7 @@ import java.io.ObjectOutputStream;
 import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 
 /**
@@ -351,7 +352,6 @@ public class CyclingPortalImpl implements CyclingPortal {
 				for (Race race : races) {
 					for (Stage stage : race.getStages()) {
 						if (stage.getID() == stageId) {
-							stageFound = true;
 							String error = stage.addRiderTimes(riderId, checkpoints);
 							switch (error){
 								case "duplicate error":
@@ -373,8 +373,26 @@ public class CyclingPortalImpl implements CyclingPortal {
 
 	@Override
 	public LocalTime[] getRiderResultsInStage(int stageId, int riderId) throws IDNotRecognisedException {
-		// TODO Auto-generated method stub
-		return null;
+		Boolean riderFound = false;
+				for (Team team : teams) {
+					for (Rider rider : team.getRiders()) {
+						if (rider.getID() == riderId) {
+							riderFound = true;
+						}
+					}
+				}
+				if (!riderFound){
+					throw new IDNotRecognisedException("Rider not found");
+				}
+				for (Race race : races) {
+					for (Stage stage : race.getStages()) {
+						if (stage.getID() == stageId) {
+							LocalTime[] times = stage.getRiderTimesAndEllapsed(riderId);
+							return times;
+						}
+					}
+				}
+				throw new IDNotRecognisedException("Stage not found");
 	}
 
 	@Override
@@ -385,7 +403,26 @@ public class CyclingPortalImpl implements CyclingPortal {
 
 	@Override
 	public void deleteRiderResultsInStage(int stageId, int riderId) throws IDNotRecognisedException {
-		// TODO Auto-generated method stub
+		Boolean riderFound = false;
+				for (Team team : teams) {
+					for (Rider rider : team.getRiders()) {
+						if (rider.getID() == riderId) {
+							riderFound = true;
+						}
+					}
+				}
+				if (!riderFound){
+					throw new IDNotRecognisedException("Rider not found");
+				}
+				for (Race race : races) {
+					for (Stage stage : race.getStages()) {
+						if (stage.getID() == stageId) {
+							stage.deleteRiderResultsInStage(riderId);
+							return;
+						}
+					}
+				}
+				throw new IDNotRecognisedException("Stage not found");
 
 	}
 

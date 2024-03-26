@@ -1,5 +1,8 @@
 package cycling;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.HashMap;
@@ -54,6 +57,23 @@ public class Stage implements java.io.Serializable{
         }
         times.put(ID, riderTimes);
         return null;
+    }
+    public void deleteRiderResultsInStage(int ID){
+        times.remove(ID);
+    }
+    public LocalTime[] getRiderTimes(int ID)
+    {
+        return times.get(ID);
+    }
+    public LocalTime[] getRiderTimesAndEllapsed(int ID)
+    {
+        LocalTime[] riderTimes = times.get(ID);
+        Long elapsedTimeSeconds = times[0].until(times[times.length], ChronoUnit.SECONDS);
+        SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
+        String elapsedTimeSDF = df.format(elapsedTimeSeconds);
+        LocalTime elapsedTime = LocalTime.parse(elapsedTimeSDF);
+        riderTimes[riderTimes.length + 1] = elapsedTime;
+        return riderTimes;
     }
 
 }
