@@ -413,12 +413,13 @@ public class CyclingPortalImpl implements CyclingPortal {
 		// TODO Auto-generated method 
 		teams = null;
 		races = null;
-		try(ObjectInputStream file= new ObjectInputStream(new FileInputStream(filename)))
+		try(ObjectInputStream file= new ObjectInputStream(new FileInputStream(filename))){
 			Object teamData = file.readObject();
 			Object raceData = file.readObject();
 
 			teams = (ArrayList<Team>) teamData;
-			races = (ArrayList<Race>) raceData;
+			races = (ArrayList<Race>) raceData; 
+		}
     	catch(IOException e)
     	{
     	    throw new IOException("Error while saving");

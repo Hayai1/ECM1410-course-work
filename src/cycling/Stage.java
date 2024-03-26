@@ -1,10 +1,12 @@
 package cycling;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.LinkedList;
 public class Stage implements java.io.Serializable{
     private int ID;
     private String name;
     private String description;
-    private LinkedList<CheckPoint> checkPoints;
+    private ArrayList<CheckPoint> checkPoints;
     private StageType stageType;
     private LocalDateTime startTime;
     private String location;
@@ -17,7 +19,7 @@ public class Stage implements java.io.Serializable{
         this.description = description;
         this.stageType = stageType;
         if (stageType != StageType.TT){
-            checkPoints = new LinkedList<CheckPoint>();
+            checkPoints = new ArrayList<CheckPoint>();
         }
         this.length = length;
         this.startTime = startTime;

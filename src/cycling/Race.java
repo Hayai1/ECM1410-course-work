@@ -10,7 +10,7 @@ public class Race implements java.io.Serializable{
     private int ID;
     private String name;
     private String description;
-    private LinkedList<Stage> stages;
+    private ArrayList<Stage> stages;
 
     public Race(int id, String name, String description) {
         ID = id;
@@ -21,7 +21,7 @@ public class Race implements java.io.Serializable{
     public int getID(){ return ID; }
     public String getName() { return name; }
     public String getDescription() { return description; }
-    public LinkedList<Stage> getStages() { return stages; }
+    public ArrayList<Stage> getStages() { return stages; }
  
     public void setName(String name) { this.name = name; }
     public void setDescription(String description) { this.description = description; }
