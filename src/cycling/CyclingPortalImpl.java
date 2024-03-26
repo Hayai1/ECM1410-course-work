@@ -366,9 +366,6 @@ public class CyclingPortalImpl implements CyclingPortal {
 					}
 				}
 				throw new IDNotRecognisedException("Stage not found");
-				
-
-
 	}
 
 	@Override
@@ -428,8 +425,16 @@ public class CyclingPortalImpl implements CyclingPortal {
 
 	@Override
 	public int[] getRidersRankInStage(int stageId) throws IDNotRecognisedException {
-		// TODO Auto-generated method stub
-		return null;
+		for (Race race : races) {
+			for (Stage stage : race.getStages()) {
+				if (stage.getID() == stageId) {
+					return race.getStageLeaderBoard(stageId);
+				}
+			}
+		}
+		throw new IDNotRecognisedException("Stage not found");
+		
+		
 	}
 
 	@Override

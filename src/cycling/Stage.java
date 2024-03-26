@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 public class Stage implements java.io.Serializable{
     private int ID;
@@ -73,6 +75,38 @@ public class Stage implements java.io.Serializable{
         LocalTime elapsedTime = LocalTime.parse(elapsedTimeSDF);
         riderTimes[riderTimes.length + 1] = elapsedTime;
         return riderTimes;
+    }    
+    public int[] getLeaderBoard(){
+        Boolean sorting = true; 
+        int[] elapsedTimeSecondsList = new int[times.size()];
+        int[] riderIDs = new int[times.size()];
+        int counter = 0;
+        for (int ID : times.keySet()){
+            LocalTime[] riderTimes = times.get(ID);
+            Long elapsedTimeSeconds = riderTimes[0].until(riderTimes[riderTimes.length], ChronoUnit.SECONDS);
+            elapsedTimeSecondsList[counter++] = elapsedTimeSeconds.intValue();
+        }
+        while (sorting){
+            sorting = false;
+            for (int i =1; i <= elapsedTimeSecondsList.length; i++){
+                if (elapsedTimeSecondsList[i] < elapsedTimeSecondsList[i-1]){
+                    //swap
+                    int elapsedTimeTemp = elapsedTimeSecondsList[i];
+                    int riderIDTemp = riderIDs[i];
+
+                    elapsedTimeSecondsList[i] = elapsedTimeSecondsList[i-1];
+                    riderIDs[i] = riderIDs[i-1];
+                    elapsedTimeSecondsList[i-1] = elapsedTimeTemp;
+                    riderIDs[i-1] = riderIDTemp;
+                    sorting = true;
+                }
+            }
+        }
+
+    
+        return riderIDs;
     }
+
+
 
 }

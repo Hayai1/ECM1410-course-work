@@ -52,5 +52,16 @@ public class Race implements java.io.Serializable{
         return stageIds;
     }
 
+    public int[] getStageLeaderBoard(int stageID){
+        int[] riderIds = null;
+        for (Stage stage : stages){
+            if (stage.getID() == stageID){
+                riderIds = stage.getLeaderBoard();
+            }
+        }
+        return riderIds;
+    }
+
+
 
 }
