@@ -148,6 +148,36 @@ public class Stage implements java.io.Serializable{
         //sort points by elapsed time and return
         return sortBasedOnElapsedTime(points);
     }
+    public int[] getMountainPointsInTimeOrder(){
+        int[] points = new int[times.size()];
+        Arrays.fill(points, 0);
+        int[] currentCheckPoint;
+        for (int checkPointPos = 1; checkPointPos <= checkPoints.size(); checkPointPos++){
+            if (checkPoints.get(checkPointPos).getCheckpointType() != CheckpointType.SPRINT ) {
+                //get the points needed e.g. [50, 40, 30, 20] 1st 2nd 3rd
+                currentCheckPoint = checkPoints.get(checkPointPos).getPointsAwarded();
+                //make currentcheckpoint times into an array
+                long[] checkPointTimes = new long[times.size()];
+                int counter =0;
+                for (int ID : times.keySet()){
+                    checkPointTimes[counter++] =  times.get(ID)[0].until(times.get(ID)[checkPointPos], ChronoUnit.SECONDS);
+                }
+                //find who's first put in appropriate position in points array and repeat
+                for (int placePoints: currentCheckPoint){
+                    long earliestFinish = Arrays.stream(checkPointTimes).min().getAsLong();
+                    if (earliestFinish != 0) {
+                        for (int i = 0; i < checkPointTimes.length; i++){
+                        points[i] += placePoints;
+                        checkPointTimes[i] = 0;
+                        }
+                    }
+                }
+            }   
+        }
+            
+        //sort points by elapsed time and return
+        return sortBasedOnElapsedTime(points);
+    }
     private int[] sortBasedOnElapsedTime(int[] inputArray){
         int[] elapsedTimeSecondsList = new int[times.size()];
         int counter = 0;
