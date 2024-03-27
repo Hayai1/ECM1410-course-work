@@ -108,48 +108,6 @@ public class Stage implements java.io.Serializable{
         return sortBasedOnElapsedTime(riderIDs);
     }
     public int[] getPointsInTimeOrder(){
-        int[] points = new int[times.size()];
-        Arrays.fill(points, 0);
-        int[] currentCheckPointPoints;
-        for (int checkPointPos = 0; checkPointPos <= checkPoints.size(); checkPointPos++){
-            //get the points needed e.g. [50, 40, 30, 20] 1st 2nd 3rd
-            currentCheckPointPoints = checkPoints.get(checkPointPos).getPointsAwarded();
-            //make currentcheckpoint times into an array
-            long[] checkPointTimes = new long[times.size()];
-            int counter =0;
-            for (int ID : times.keySet()){
-                checkPointTimes[counter++] =  times.get(ID)[0].until(times.get(ID)[checkPointPos], ChronoUnit.SECONDS);
-            }
-            //find who's first put in appropriate position in points array and repeat
-            for (int placePoints: currentCheckPointPoints){
-                long earliestFinish = Arrays.stream(checkPointTimes).min().getAsLong();
-                if (earliestFinish != 0) {
-                    for (int i = 0; i < checkPointTimes.length; i++){
-                        points[i] += placePoints;
-                        checkPointTimes[i] = 0;
-                    }
-                }
-            }
-        }
-        //for last checkpoint/end of stage
-        long[] checkPointTimes = new long[times.size()];
-        int counter = 0;
-        for (int ID : times.keySet()){
-            checkPointTimes[counter++] =  times.get(ID)[0].until(times.get(ID)[times.get(ID).length], ChronoUnit.SECONDS);
-        }
-        for (int placePoints: pointsAwarded){
-            long earliestFinish = Arrays.stream(checkPointTimes).min().getAsLong();
-            if (earliestFinish != 0) {
-                for (int i = 0; i < checkPointTimes.length; i++){
-                    points[i] += placePoints;
-                    checkPointTimes[i] = 0;
-                }
-            }
-        }
-        //sort points by elapsed time and return
-        return sortBasedOnElapsedTime(points);
-    }
-    public int[] getMountainPointsInTimeOrder(){
         int[][] pointsAwarded = new int[checkPoints.size()][times.size()];
         if (checkPoints != null){
             int counter = 0;
@@ -211,9 +169,36 @@ public class Stage implements java.io.Serializable{
         //in the end the riderPoints hashmap will have the total points for each rider for this stage with the rider id as the key and the total points as the value
         return sortBasedOnElapsedTime(riderPoints.keySet().stream().mapToInt(Integer::intValue).toArray());
     }
-
-
-    
+    public int[] getMountainPointsInTimeOrder(){
+        int[] points = new int[times.size()];
+        Arrays.fill(points, 0);
+        int[] currentCheckPoint;
+        for (int checkPointPos = 1; checkPointPos <= checkPoints.size(); checkPointPos++){
+            if (checkPoints.get(checkPointPos).getCheckpointType() != CheckpointType.SPRINT ) {
+                //get the points needed e.g. [50, 40, 30, 20] 1st 2nd 3rd
+                currentCheckPoint = checkPoints.get(checkPointPos).getPointsAwarded();
+                //make currentcheckpoint times into an array
+                long[] checkPointTimes = new long[times.size()];
+                int counter =0;
+                for (int ID : times.keySet()){
+                    checkPointTimes[counter++] =  times.get(ID)[0].until(times.get(ID)[checkPointPos], ChronoUnit.SECONDS);
+                }
+                //find who's first put in appropriate position in points array and repeat
+                for (int placePoints: currentCheckPoint){
+                    long earliestFinish = Arrays.stream(checkPointTimes).min().getAsLong();
+                    if (earliestFinish != 0) {
+                        for (int i = 0; i < checkPointTimes.length; i++){
+                        points[i] += placePoints;
+                        checkPointTimes[i] = 0;
+                        }
+                    }
+                }
+            }   
+        }
+            
+        //sort points by elapsed time and return
+        return sortBasedOnElapsedTime(points);
+    }
 
     
 
