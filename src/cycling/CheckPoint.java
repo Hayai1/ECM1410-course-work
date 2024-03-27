@@ -1,7 +1,5 @@
 package cycling;
-import java.time.LocalDateTime;
-import cycling.CheckpointType;
-import java.util.UUID;
+
 public class CheckPoint implements java.io.Serializable{
     private int ID;
     private int[] pointsAwarded;
@@ -42,8 +40,8 @@ public class CheckPoint implements java.io.Serializable{
                 int[] cat1Points = {10,8,6,4,2,1};
                 return cat1Points;
             default:
-                int[] eXtremePoints = {20,15,12,10,8,6,4,2};
-                return eXtremePoints;
+                int[] extremePoints = {20,15,12,10,8,6,4,2};
+                return extremePoints;
         }
 
     }
