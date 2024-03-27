@@ -108,67 +108,48 @@ public class Stage implements java.io.Serializable{
         return sortBasedOnElapsedTime(riderIDs);
     }
     public int[] getPointsInTimeOrder(){
-        int[][] pointsAwarded = new int[checkPoints.size()][times.size()];
-        if (checkPoints != null){
-            int counter = 0;
-            for (CheckPoint checkPoint : checkPoints){
-                int[] currentCheckPointPoints = checkPoint.getPointsAwarded();
-                for (int i = 0; i < times.size(); i++){
-                    pointsAwarded[counter][i] = currentCheckPointPoints[i];
+        int[] points = new int[times.size()];
+        Arrays.fill(points, 0);
+        int[] currentCheckPointPoints;
+        for (int checkPointPos = 0; checkPointPos <= checkPoints.size(); checkPointPos++){
+            //get the points needed e.g. [50, 40, 30, 20] 1st 2nd 3rd
+            currentCheckPointPoints = checkPoints.get(checkPointPos).getPointsAwarded();
+            //make currentcheckpoint times into an array
+            long[] checkPointTimes = new long[times.size()];
+            int counter =0;
+            for (int ID : times.keySet()){
+                checkPointTimes[counter++] =  times.get(ID)[0].until(times.get(ID)[checkPointPos], ChronoUnit.SECONDS);
+            }
+            //find who's first put in appropriate position in points array and repeat
+            for (int placePoints: currentCheckPointPoints){
+                long earliestFinish = Arrays.stream(checkPointTimes).min().getAsLong();
+                if (earliestFinish != 0) {
+                    for (int i = 0; i < checkPointTimes.length; i++){
+                        points[i] += placePoints;
+                        checkPointTimes[i] = 0;
+                    }
                 }
             }
         }
-        int lengthOfFirstValue = times.get(times.keySet().toArray()[0]).length;//get how many checkpoints there are
-        long[][] myTimes = new long[lengthOfFirstValue-1][times.size()];//create a 2d array to store the times with each array being a checkpoint
-        int counter = 0;  
-        long time;
-
-        //get the times it took each rider to get to each checkpoint
-        for (LocalTime[] riderTimes : times.values()){//for each riders times
-            for (int checkPointIndex = 1; checkPointIndex <= riderTimes.length-1; checkPointIndex++){//for 
-                time = riderTimes[0].until(riderTimes[checkPointIndex], ChronoUnit.SECONDS);
-                myTimes[checkPointIndex-1][counter] = time;
-            }
-            counter++;
-        }
-        //create a list of hashmaps with each hashmap representing the times it took to get to that checkpoint the rider id as the key and the time (in seconds) as the value
-        List<Map<Integer, Long>> listOfTimesWithIds = new ArrayList<Map<Integer, Long>>();
-        //add each riders times to a hashmap
-        for (int i = 0; i < myTimes.length; i++){
-            Map<Integer, Long> map = new HashMap<Integer, Long>();
-            for (int j = 0; j < myTimes[i].length; j++){
-                map.put(j, myTimes[i][j]);
-            }
-            listOfTimesWithIds.add(map);
-        }
-        
-        int rankCounter = 0;
-        long points = 0;
-        int checkPointCounter = 0;
-        //create a new hashmap to store the total points for each rider for this stage
-        HashMap<Integer, Long> riderPoints = new HashMap<Integer, Long>();
+        //for last checkpoint/end of stage
+        long[] checkPointTimes = new long[times.size()];
+        int counter = 0;
         for (int ID : times.keySet()){
-            riderPoints.put(ID, 0L);
+            checkPointTimes[counter++] =  times.get(ID)[0].until(times.get(ID)[times.get(ID).length], ChronoUnit.SECONDS);
         }
-        HashMap<Integer, Long> elapsedTimes = new HashMap<Integer, Long>();
-        for (LocalTime[] riderTimes : times.values()){
-            time = riderTimes[0].until(riderTimes[riderTimes.length-1], ChronoUnit.SECONDS);
-            elapsedTimes.put(counter, time);
-        }
-        //for each checkpoint sort the times and award points then add them onto there total points in the riderPoints hashmap
-        for (Map<Integer, Long> map : listOfTimesWithIds){
-            map.entrySet().stream().sorted(Map.Entry.comparingByValue());
-            for (Integer key : map.keySet()){
-                points = pointsAwarded[checkPointCounter][rankCounter];
-                riderPoints.replace(key, riderPoints.get(key)+points);
-                rankCounter++;
+        for (int placePoints: pointsAwarded){
+            long earliestFinish = Arrays.stream(checkPointTimes).min().getAsLong();
+            if (earliestFinish != 0) {
+                for (int i = 0; i < checkPointTimes.length; i++){
+                    points[i] += placePoints;
+                    checkPointTimes[i] = 0;
+                }
             }
-            rankCounter = 0;
-            checkPointCounter++;
         }
-        //in the end the riderPoints hashmap will have the total points for each rider for this stage with the rider id as the key and the total points as the value
-        return sortBasedOnElapsedTime(riderPoints.keySet().stream().mapToInt(Integer::intValue).toArray());
+        //sort points by elapsed time and return
+        return sortBasedOnElapsedTime(points);
     }
+    
     public int[] getMountainPointsInTimeOrder(){
         int[] points = new int[times.size()];
         Arrays.fill(points, 0);
