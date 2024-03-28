@@ -371,31 +371,49 @@ public class CyclingPortalImpl implements CyclingPortal {
 	@Override
 	public LocalTime[] getRiderResultsInStage(int stageId, int riderId) throws IDNotRecognisedException {
 		Boolean riderFound = false;
-				for (Team team : teams) {
-					for (Rider rider : team.getRiders()) {
-						if (rider.getID() == riderId) {
-							riderFound = true;
-						}
-					}
+		for (Team team : teams) {
+			for (Rider rider : team.getRiders()) {
+				if (rider.getID() == riderId) {
+					riderFound = true;
 				}
-				if (!riderFound){
-					throw new IDNotRecognisedException("Rider not found");
+			}
+		}
+		if (!riderFound){
+			throw new IDNotRecognisedException("Rider not found");
+		}
+		for (Race race : races) {
+			for (Stage stage : race.getStages()) {
+				if (stage.getID() == stageId) {
+					LocalTime[] times = stage.getRiderTimesAndEllapsed(riderId);
+					return times;
 				}
-				for (Race race : races) {
-					for (Stage stage : race.getStages()) {
-						if (stage.getID() == stageId) {
-							LocalTime[] times = stage.getRiderTimesAndEllapsed(riderId);
-							return times;
-						}
-					}
-				}
-				throw new IDNotRecognisedException("Stage not found");
+			}
+		}
+		throw new IDNotRecognisedException("Stage not found");
 	}
 
 	@Override
 	public LocalTime getRiderAdjustedElapsedTimeInStage(int stageId, int riderId) throws IDNotRecognisedException {
-		// TODO Auto-generated method stub
-		return null;
+		Boolean riderFound = false;
+		for (Team team : teams) {
+			for (Rider rider : team.getRiders()) {
+				if (rider.getID() == riderId) {
+					riderFound = true;
+				}
+			}
+		}
+		if (!riderFound){
+			throw new IDNotRecognisedException("Rider not found");
+		}
+		for (Race race : races) {
+			for (Stage stage : race.getStages()) {
+				if (stage.getID() == stageId) {
+					LocalTime adjsutedElapsedTime = stage.getRiderAdjustedElapsed(riderId);
+					return adjsutedElapsedTime;
+				}
+			}
+		}
+		throw new IDNotRecognisedException("Stage not found");
 	}
 
 	@Override
@@ -439,8 +457,14 @@ public class CyclingPortalImpl implements CyclingPortal {
 
 	@Override
 	public LocalTime[] getRankedAdjustedElapsedTimesInStage(int stageId) throws IDNotRecognisedException {
-		// TODO Auto-generated method stub
-		return null;
+		for (Race race : races) {
+			for (Stage stage : race.getStages()) {
+				if (stage.getID() == stageId) {
+					return stage.getAdjustedTimesInTimeOrder();
+				}
+			}
+		}
+		throw new IDNotRecognisedException("Stage not found");
 	}
 
 	@Override
@@ -554,13 +578,16 @@ public class CyclingPortalImpl implements CyclingPortal {
 
 	@Override
 	public int[] getRidersPointClassificationRank(int raceId) throws IDNotRecognisedException {
-		// TODO Auto-generated method stub
-		return null;
+		for (Race race : races) {
+			if (race.getID() == raceId) {
+				return race.getPointLeaderboard();
+			}
+		}
+		throw new IDNotRecognisedException("Race not found");
 	}
 
 	@Override
 	public int[] getRidersMountainPointClassificationRank(int raceId) throws IDNotRecognisedException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
