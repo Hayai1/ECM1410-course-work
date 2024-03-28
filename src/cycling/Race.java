@@ -169,26 +169,70 @@ public class Race implements java.io.Serializable{
         }
         //converts Arraylists into arrays to be sorted
         Integer[] arrayIDs = riderIDs.toArray(new Integer[riderIDs.size()]);
-        LocalTime[] arrayPts = riderTimes.toArray(new LocalTime[riderTimes.size()]);
-        //sorts arrayIDs to be in order of arrayPts desc
+        LocalTime[] arrayTimes = riderTimes.toArray(new LocalTime[riderTimes.size()]);
+        //sorts arrayIDs to be in order of arrayTimess asc
         Boolean sorting = true;
         while (sorting){
             sorting = false;
-            for (int i =1; i <= arrayPts.length; i++){
-                if (arrayPts[i].compareTo(arrayPts[i-1]) > 1){
+            for (int i =1; i <= arrayTimes.length; i++){
+                if (arrayTimes[i].compareTo(arrayTimes[i-1]) > 1){
                     //swap
                     Integer riderIDTemp = arrayIDs[i];
-                    LocalTime riderPtsTemp = arrayPts[i];
+                    LocalTime riderPtsTemp = arrayTimes[i];
                     arrayIDs[i] = arrayIDs[i-1];
-                    arrayPts[i] = arrayPts[i-1];
+                    arrayTimes[i] = arrayTimes[i-1];
                     arrayIDs[i-1] = riderIDTemp;
-                    arrayPts[i-1] = riderPtsTemp;
+                    arrayTimes[i-1] = riderPtsTemp;
                     sorting = true;
                 }
             }
         }
 
         return Arrays.stream(arrayIDs).mapToInt(Integer::intValue).toArray();
+    }
+    public LocalTime[] getElapsedTimesSortedByAdjustedTimes(){
+        ArrayList<Integer> riderIDs = new ArrayList<Integer>();
+        ArrayList<LocalTime> riderTimes = new ArrayList<LocalTime>();
+        ArrayList<LocalTime> elapsedTimes = new ArrayList<LocalTime>();
+        for (Stage stage: stages){
+            LocalTime[] stageTimes = stage.getAdjustedTimesInTimeOrder();
+            LocalTime[] stageElapsedTimes = stage.getTimesInTimeOrder();
+            int counter = 0;
+            for (int ID: stage.getLeaderBoard()){
+                if (riderIDs.contains(ID)){
+                    int index = riderIDs.indexOf(ID);
+                    riderTimes.set(index , riderTimes.get(index).plusSeconds(stageTimes[counter].toSecondOfDay()));
+                    elapsedTimes.set(index , elapsedTimes.get(index).plusSeconds(stageElapsedTimes[counter].toSecondOfDay()));
+                }else
+                {
+                    riderIDs.add(ID);
+                    riderTimes.add(stageTimes[riderIDs.indexOf(ID)]);
+                }
+                counter++;
+            }
+        }
+        //converts Arraylists into arrays to be sorted
+        LocalTime[] arrayElapsedTimes = elapsedTimes.toArray(new LocalTime[riderIDs.size()]);
+        LocalTime[] arrayTimes = riderTimes.toArray(new LocalTime[riderTimes.size()]);
+        //sorts arrayIDs to be in order of arrayPts desc
+        Boolean sorting = true;
+        while (sorting){
+            sorting = false;
+            for (int i =1; i <= arrayTimes.length; i++){
+                if (arrayTimes[i].compareTo(arrayTimes[i-1]) > 1){
+                    //swap
+                    LocalTime riderIDTemp = arrayElapsedTimes[i];
+                    LocalTime riderPtsTemp = arrayTimes[i];
+                    arrayElapsedTimes[i] = arrayElapsedTimes[i-1];
+                    arrayTimes[i] = arrayTimes[i-1];
+                    arrayElapsedTimes[i-1] = riderIDTemp;
+                    arrayTimes[i-1] = riderPtsTemp;
+                    sorting = true;
+                }
+            }
+        }
+
+        return arrayElapsedTimes;
     }
 
 

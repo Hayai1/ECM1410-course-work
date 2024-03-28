@@ -554,8 +554,12 @@ public class CyclingPortalImpl implements CyclingPortal {
 
 	@Override
 	public LocalTime[] getGeneralClassificationTimesInRace(int raceId) throws IDNotRecognisedException {
-		// TODO Auto-generated method stub
-		return null;
+		for (Race race : races) {
+			if (race.getID() == raceId) {
+				return race.getElapsedTimesSortedByAdjustedTimes();
+			}
+		}
+		throw new IDNotRecognisedException("Race not found");
 	}
 
 	@Override
