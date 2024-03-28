@@ -417,12 +417,19 @@ public class Stage implements java.io.Serializable{
                 }
             }
         }
-
         return inputArray;
     }
+    /**
+     * removes rider ID and associated times from times
+     * @param ID the id to remove
+     */
     public void removeRiderById(int ID){
         times.remove(ID);
     }
+    /**
+     * Gets all rider ids in stage
+     * @return an array of all rider ids in stage
+     */
     public int[] getIDs(){
         return Arrays.stream(times.keySet().toArray(new Integer[times.keySet().size()])).mapToInt(Integer::intValue).toArray();
     }
