@@ -365,6 +365,15 @@ public class CyclingPortalImpl implements CyclingPortal {
 			for (Rider rider : team.getRiders()) {//for each rider in that team
 				if (rider.getID() == riderId) {//if it's the rider we are looking for
 					team.getRiders().remove(rider);//remove the rider
+					for (Race race: races){
+						for (Stage stage: race.getStages()){
+							for (int id: stage.getIDs()){
+								if (id == riderId){
+									stage.removeRiderById(id);
+								}
+							}
+						}
+					}
 					return;//return
 				}
 			}

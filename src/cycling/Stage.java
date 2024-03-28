@@ -420,4 +420,10 @@ public class Stage implements java.io.Serializable{
 
         return inputArray;
     }
+    public void removeRiderById(int ID){
+        times.remove(ID);
+    }
+    public int[] getIDs(){
+        return Arrays.stream(times.keySet().toArray(new Integer[times.keySet().size()])).mapToInt(Integer::intValue).toArray();
+    }
 }
