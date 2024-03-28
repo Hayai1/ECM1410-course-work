@@ -235,7 +235,94 @@ public class Race implements java.io.Serializable{
 
         return arrayElapsedTimes;
     }
+    public int[] getRidersPtsSortedByAdjustedTimes(){
+        ArrayList<Integer> riderIDs = new ArrayList<Integer>();
+        ArrayList<LocalTime> riderTimes = new ArrayList<LocalTime>();
+        ArrayList<Integer> ridersPts = new ArrayList<Integer>();
+        for (Stage stage: stages){
+            LocalTime[] stageTimes = stage.getAdjustedTimesInTimeOrder();
+            int[] stagePts = stage.getPointsInTimeOrder();
+            int counter = 0;
+            for (int ID: stage.getLeaderBoard()){
+                if (riderIDs.contains(ID)){
+                    int index = riderIDs.indexOf(ID);
+                    riderTimes.set(index , riderTimes.get(index).plusSeconds(stageTimes[counter].toSecondOfDay()));
+                    ridersPts.set(index , ridersPts.get(index) + stagePts[counter]);
+                }else
+                {
+                    riderIDs.add(ID);
+                    riderTimes.add(stageTimes[riderIDs.indexOf(ID)]);
+                    ridersPts.add(stagePts[riderIDs.indexOf(ID)]);
+                }
+                counter++;
+            }
+        }
+        //converts Arraylists into arrays to be sorted
+        Integer[] arrayPts = ridersPts.toArray(new Integer[riderIDs.size()]);
+        LocalTime[] arrayTimes = riderTimes.toArray(new LocalTime[riderTimes.size()]);
+        //sorts arrayIDs to be in order of arrayPts desc
+        Boolean sorting = true;
+        while (sorting){
+            sorting = false;
+            for (int i =1; i <= arrayTimes.length; i++){
+                if (arrayTimes[i].compareTo(arrayTimes[i-1]) > 1){
+                    //swap
+                    Integer riderIDTemp = arrayPts[i];
+                    LocalTime riderPtsTemp = arrayTimes[i];
+                    arrayPts[i] = arrayPts[i-1];
+                    arrayTimes[i] = arrayTimes[i-1];
+                    arrayPts[i-1] = riderIDTemp;
+                    arrayTimes[i-1] = riderPtsTemp;
+                    sorting = true;
+                }
+            }
+        }
 
+        return Arrays.stream(arrayPts).mapToInt(Integer::intValue).toArray();
+    }
+    public int[] getRidersMountainPtsSortedByAdjustedTimes(){
+        ArrayList<Integer> riderIDs = new ArrayList<Integer>();
+        ArrayList<LocalTime> riderTimes = new ArrayList<LocalTime>();
+        ArrayList<Integer> ridersPts = new ArrayList<Integer>();
+        for (Stage stage: stages){
+            LocalTime[] stageTimes = stage.getAdjustedTimesInTimeOrder();
+            int[] stagePts = stage.getMountainPointsInTimeOrder();
+            int counter = 0;
+            for (int ID: stage.getLeaderBoard()){
+                if (riderIDs.contains(ID)){
+                    int index = riderIDs.indexOf(ID);
+                    riderTimes.set(index , riderTimes.get(index).plusSeconds(stageTimes[counter].toSecondOfDay()));
+                    ridersPts.set(index , ridersPts.get(index) + stagePts[counter]);
+                }else
+                {
+                    riderIDs.add(ID);
+                    riderTimes.add(stageTimes[riderIDs.indexOf(ID)]);
+                    ridersPts.add(stagePts[riderIDs.indexOf(ID)]);
+                }
+                counter++;
+            }
+        }
+        //converts Arraylists into arrays to be sorted
+        Integer[] arrayPts = ridersPts.toArray(new Integer[riderIDs.size()]);
+        LocalTime[] arrayTimes = riderTimes.toArray(new LocalTime[riderTimes.size()]);
+        //sorts arrayIDs to be in order of arrayPts desc
+        Boolean sorting = true;
+        while (sorting){
+            sorting = false;
+            for (int i =1; i <= arrayTimes.length; i++){
+                if (arrayTimes[i].compareTo(arrayTimes[i-1]) > 1){
+                    //swap
+                    Integer riderIDTemp = arrayPts[i];
+                    LocalTime riderPtsTemp = arrayTimes[i];
+                    arrayPts[i] = arrayPts[i-1];
+                    arrayTimes[i] = arrayTimes[i-1];
+                    arrayPts[i-1] = riderIDTemp;
+                    arrayTimes[i-1] = riderPtsTemp;
+                    sorting = true;
+                }
+            }
+        }
 
-
+        return Arrays.stream(arrayPts).mapToInt(Integer::intValue).toArray();
+    }
 }
