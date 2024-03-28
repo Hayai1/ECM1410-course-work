@@ -156,6 +156,49 @@ public class Stage implements java.io.Serializable{
      * Gets the Points of all the riders In Time Order for the stage
      * @return pointsAwarded
      */
+    public LocalTime[] getAdjustedTimesInTimeOrder(){
+        LocalTime[] stageTimes = new LocalTime[times.size()];
+        int counter = 0;
+        //creates list of elapsed times
+        for (int ID : times.keySet()){
+            LocalTime[] riderTimes = times.get(ID);
+            Long elapsedTimeSeconds = riderTimes[0].until(riderTimes[riderTimes.length], ChronoUnit.SECONDS);
+            SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
+            String elapsedTimeSDF = df.format(elapsedTimeSeconds);
+            LocalTime elapsedTime = LocalTime.parse(elapsedTimeSDF);
+            stageTimes[counter++] = elapsedTime;
+        }
+        //adjusts times to take into account riders finishing close together
+        //puts into elapsed time order
+        stageTimes = sortBasedOnElapsedForTimes(stageTimes);
+        //if time between time and faster time is less than 1 second, makes same value
+        //repeats until adjusted time is met/no changes
+        Boolean changeHappens = true;
+        while (changeHappens){
+            changeHappens = false;
+            for (int i = stageTimes.length; i >= 1; i++){
+                if (stageTimes[i-1].until(stageTimes[i], ChronoUnit.SECONDS) < 1 && stageTimes[i-1].until(stageTimes[i], ChronoUnit.SECONDS) != 0){
+                    stageTimes[i] = stageTimes[i-1];
+                    changeHappens = true;
+                }
+            }
+        }
+        return stageTimes;
+    }
+    public LocalTime getRiderAdjustedElapsed(int inputID){
+        //find position on regular leaderboard that is sorted by elapsed time
+        int position = 0;
+        int[] leaderboard = getLeaderBoard();
+        for (int i = 0; i < leaderboard.length; i++){
+            int riderID = leaderboard[i];
+            if (riderID == inputID){
+                position = i;
+            }
+        }
+        //use position to return elapsed time
+        return getAdjustedTimesInTimeOrder()[position];
+    }
+
     public int[] getPointsInTimeOrder(){
         long[] checkPointTimes;//this will store the times each rider took to get to a specific checkpoint
         int[] points = new int[times.size()];//create array of points for each rider
@@ -326,5 +369,33 @@ public class Stage implements java.io.Serializable{
             }
         }
         return inputArray;//return sorted array
+    }
+
+    private LocalTime[] sortBasedOnElapsedForTimes(LocalTime[] inputArray){
+        int[] elapsedTimeSecondsList = new int[times.size()];
+        int counter = 0;
+        for (int ID : times.keySet()){
+            LocalTime[] riderTimes = times.get(ID);
+            Long elapsedTimeSeconds = riderTimes[0].until(riderTimes[riderTimes.length], ChronoUnit.SECONDS);
+            elapsedTimeSecondsList[counter++] = elapsedTimeSeconds.intValue();
+        }
+        Boolean sorting = true;
+        while (sorting){
+            sorting = false;
+            for (int i =1; i <= elapsedTimeSecondsList.length; i++){
+                if (elapsedTimeSecondsList[i] < elapsedTimeSecondsList[i-1]){
+                    //swap
+                    int elapsedTimeTemp = elapsedTimeSecondsList[i];
+                    LocalTime riderIDTemp = inputArray[i];
+                    elapsedTimeSecondsList[i] = elapsedTimeSecondsList[i-1];
+                    inputArray[i] = inputArray[i-1];
+                    elapsedTimeSecondsList[i-1] = elapsedTimeTemp;
+                    inputArray[i-1] = riderIDTemp;
+                    sorting = true;
+                }
+            }
+        }
+
+        return inputArray;
     }
 }
