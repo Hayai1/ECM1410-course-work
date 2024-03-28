@@ -592,7 +592,12 @@ public class CyclingPortalImpl implements CyclingPortal {
 
 	@Override
 	public int[] getRidersMountainPointClassificationRank(int raceId) throws IDNotRecognisedException {
-		return null;
+		for (Race race : races) {
+			if (race.getID() == raceId) {
+				return race.getMountainPointLeaderboard();
+			}
+		}
+		throw new IDNotRecognisedException("Race not found");
 	}
 
 }

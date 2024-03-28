@@ -107,6 +107,48 @@ public class Race implements java.io.Serializable{
 
         return Arrays.stream(arrayIDs).mapToInt(Integer::intValue).toArray();
     }
+    public int[] getMountainPointLeaderboard(){
+        ArrayList<Integer> riderIDs = new ArrayList<Integer>();
+        ArrayList<Integer> riderPoints = new ArrayList<Integer>();
+        for (Stage stage: stages){
+            int[] stagePoints = stage.getMountainPointsInTimeOrder();
+            int counter = 0;
+            for (int ID: stage.getLeaderBoard()){
+                if (riderIDs.contains(ID)){
+                    int index = riderIDs.indexOf(ID);
+                    riderPoints.set(index , riderPoints.get(index) + stagePoints[counter]);
+                }else
+                {
+                    riderIDs.add(ID);
+                    riderPoints.add(stagePoints[riderIDs.indexOf(ID)]);
+                }
+                counter++;
+            }
+        }
+        //converts Arraylists into arrays to be sorted
+        Integer[] arrayIDs = riderIDs.toArray(new Integer[riderIDs.size()]);
+        Integer[] arrayPts = riderPoints.toArray(new Integer[riderPoints.size()]);
+        //sorts arrayIDs to be in order of arrayPts desc
+        Boolean sorting = true;
+        while (sorting){
+            sorting = false;
+            for (int i =1; i <= arrayPts.length; i++){
+                if (arrayPts[i] > arrayPts[i-1]){
+                    //swap
+                    Integer riderIDTemp = arrayIDs[i];
+                    Integer riderPtsTemp = arrayPts[i];
+                    arrayIDs[i] = arrayIDs[i-1];
+                    arrayPts[i] = arrayPts[i-1];
+                    arrayIDs[i-1] = riderIDTemp;
+                    arrayPts[i-1] = riderPtsTemp;
+                    sorting = true;
+                }
+            }
+        }
+
+
+        return Arrays.stream(arrayIDs).mapToInt(Integer::intValue).toArray();
+    }
     public int[] getStageAdjustedLeaderboard(){
         ArrayList<Integer> riderIDs = new ArrayList<Integer>();
         ArrayList<LocalTime> riderTimes = new ArrayList<LocalTime>();
