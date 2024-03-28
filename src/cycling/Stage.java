@@ -156,7 +156,7 @@ public class Stage implements java.io.Serializable{
      * Gets the Points of all the riders In Time Order for the stage
      * @return pointsAwarded
      */
-    public LocalTime[] getAdjustedTimesInTimeOrder(){
+    public LocalTime[] getTimesInTimeOrder(){
         LocalTime[] stageTimes = new LocalTime[times.size()];
         int counter = 0;
         //creates list of elapsed times
@@ -168,9 +168,13 @@ public class Stage implements java.io.Serializable{
             LocalTime elapsedTime = LocalTime.parse(elapsedTimeSDF);
             stageTimes[counter++] = elapsedTime;
         }
-        //adjusts times to take into account riders finishing close together
         //puts into elapsed time order
         stageTimes = sortBasedOnElapsedForTimes(stageTimes);
+        return stageTimes;
+    }
+    public LocalTime[] getAdjustedTimesInTimeOrder(){
+        LocalTime[] stageTimes = getTimesInTimeOrder();
+        //adjusts times to take into account riders finishing close together
         //if time between time and faster time is less than 1 second, makes same value
         //repeats until adjusted time is met/no changes
         Boolean changeHappens = true;

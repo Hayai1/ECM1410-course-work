@@ -593,20 +593,32 @@ public class CyclingPortalImpl implements CyclingPortal {
 
 	@Override
 	public LocalTime[] getGeneralClassificationTimesInRace(int raceId) throws IDNotRecognisedException {
-		// TODO Auto-generated method stub
-		return null;
+		for (Race race : races) {
+			if (race.getID() == raceId) {
+				return race.getElapsedTimesSortedByAdjustedTimes();
+			}
+		}
+		throw new IDNotRecognisedException("Race not found");
 	}
 
 	@Override
 	public int[] getRidersPointsInRace(int raceId) throws IDNotRecognisedException {
-		// TODO Auto-generated method stub
-		return null;
+		for (Race race : races) {
+			if (race.getID() == raceId) {
+				return race.getRidersPtsSortedByAdjustedTimes();
+			}
+		}
+		throw new IDNotRecognisedException("Race not found");
 	}
 
 	@Override
 	public int[] getRidersMountainPointsInRace(int raceId) throws IDNotRecognisedException {
-		// TODO Auto-generated method stub
-		return null;
+		for (Race race : races) {
+			if (race.getID() == raceId) {
+				return race.getRidersMountainPtsSortedByAdjustedTimes();
+			}
+		}
+		throw new IDNotRecognisedException("Race not found");
 	}
 
 	@Override
@@ -631,7 +643,12 @@ public class CyclingPortalImpl implements CyclingPortal {
 
 	@Override
 	public int[] getRidersMountainPointClassificationRank(int raceId) throws IDNotRecognisedException {
-		return null;
+		for (Race race : races) {
+			if (race.getID() == raceId) {
+				return race.getMountainPointLeaderboard();
+			}
+		}
+		throw new IDNotRecognisedException("Race not found");
 	}
 
 }
