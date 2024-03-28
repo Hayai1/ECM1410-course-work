@@ -63,25 +63,27 @@ public class Stage implements java.io.Serializable{
     public double getLength(){ return length; }
     public boolean getWaitingForResults(){ return waitingForResults; }
     public StageType getStageType(){ return stageType; }
+    public ArrayList<CheckPoint> getCheckPoints(){ return checkPoints; }
     
     public void setWaitingForResults(boolean waitingForResults){ this.waitingForResults = waitingForResults; }
     public void addCheckPoint(int ID, CheckpointType type, double length){ checkPoints.add(new CheckPoint(ID, type, length)); }
     public void addCheckPoint(int ID, CheckpointType type, double length, double averageGradient){ checkPoints.add(new CheckPoint(ID, type, length, averageGradient)); }
     public String addRiderTimes(int ID, LocalTime[] riderTimes){
-        if(times.containsKey(ID))
+        if(times.containsKey(ID))//if rider already has times
         {
             return "duplicate error";
         } 
-        else if (riderTimes.length != checkPoints.size() + 2){
+        else if (riderTimes.length != checkPoints.size() + 2){//if rider times and checkpoints amount don't match
             return "checkpoint amount error";
         }
-        else if (!waitingForResults)
+        else if (!waitingForResults)//if not waiting for results
         {
             return "not waiting for results";
         }
-        times.put(ID, riderTimes);
-        return null;
+        times.put(ID, riderTimes);//add rider times
+        return null;//return null as no errors
     }
+    
     public void deleteRiderResultsInStage(int ID){
         times.remove(ID);
     }
@@ -99,6 +101,15 @@ public class Stage implements java.io.Serializable{
         riderTimes[riderTimes.length + 1] = elapsedTime;
         return riderTimes;
     }    
+
+    public void removeCheckPoint(int ID){
+        for (CheckPoint checkPoint : checkPoints){
+            if (checkPoint.getID() == ID){
+                checkPoints.remove(checkPoint);
+            }
+        }
+    }
+
     public int[] getLeaderBoard(){
         int[] riderIDs = new int[times.size()];
         int counter = 0;
