@@ -132,6 +132,7 @@ public class Race implements java.io.Serializable{
     public int[] getPointLeaderboard(){
         ArrayList<Integer> riderIDs = new ArrayList<Integer>();
         ArrayList<Integer> riderPoints = new ArrayList<Integer>();
+        //fills two arrays with IDs and corresponding points of all stages
         for (Stage stage: stages){
             int[] stagePoints = stage.getPointsInTimeOrder();
             int counter = 0;
@@ -178,6 +179,7 @@ public class Race implements java.io.Serializable{
     public int[] getMountainPointLeaderboard(){
         ArrayList<Integer> riderIDs = new ArrayList<Integer>();
         ArrayList<Integer> riderPoints = new ArrayList<Integer>();
+        //fills two arrays with IDs and corresponding mountain points of all stages
         for (Stage stage: stages){
             int[] stagePoints = stage.getMountainPointsInTimeOrder();
             int counter = 0;
@@ -224,6 +226,7 @@ public class Race implements java.io.Serializable{
     public int[] getStageAdjustedLeaderboard(){
         ArrayList<Integer> riderIDs = new ArrayList<Integer>();
         ArrayList<LocalTime> riderTimes = new ArrayList<LocalTime>();
+        //fills two arrays with IDs and corresponding total adjusted time of stages
         for (Stage stage: stages){
             LocalTime[] stageTimes = stage.getAdjustedTimesInTimeOrder();
             int counter = 0;
@@ -270,6 +273,7 @@ public class Race implements java.io.Serializable{
         ArrayList<Integer> riderIDs = new ArrayList<Integer>();
         ArrayList<LocalTime> riderTimes = new ArrayList<LocalTime>();
         ArrayList<LocalTime> elapsedTimes = new ArrayList<LocalTime>();
+        //fills three arrays with IDs and corresponding total adjusted time and unadjusted time for all stages
         for (Stage stage: stages){
             LocalTime[] stageTimes = stage.getAdjustedTimesInTimeOrder();
             LocalTime[] stageElapsedTimes = stage.getTimesInTimeOrder();
@@ -291,7 +295,7 @@ public class Race implements java.io.Serializable{
         //converts Arraylists into arrays to be sorted
         LocalTime[] arrayElapsedTimes = elapsedTimes.toArray(new LocalTime[riderIDs.size()]);
         LocalTime[] arrayTimes = riderTimes.toArray(new LocalTime[riderTimes.size()]);
-        //sorts arrayIDs to be in order of arrayPts desc
+        //sorts total elapsed times to be in order of total adjusted elapsed times
         Boolean sorting = true;
         while (sorting){
             sorting = false;
@@ -315,6 +319,7 @@ public class Race implements java.io.Serializable{
         ArrayList<Integer> riderIDs = new ArrayList<Integer>();
         ArrayList<LocalTime> riderTimes = new ArrayList<LocalTime>();
         ArrayList<Integer> ridersPts = new ArrayList<Integer>();
+        //fills three arrays with IDs and corresponding total adjusted times and total points for all stages
         for (Stage stage: stages){
             LocalTime[] stageTimes = stage.getAdjustedTimesInTimeOrder();
             int[] stagePts = stage.getPointsInTimeOrder();
@@ -336,7 +341,7 @@ public class Race implements java.io.Serializable{
         //converts Arraylists into arrays to be sorted
         Integer[] arrayPts = ridersPts.toArray(new Integer[riderIDs.size()]);
         LocalTime[] arrayTimes = riderTimes.toArray(new LocalTime[riderTimes.size()]);
-        //sorts arrayIDs to be in order of arrayPts desc
+        //sorts total points to be in order of total adjusted elapsed times
         Boolean sorting = true;
         while (sorting){
             sorting = false;
@@ -364,6 +369,7 @@ public class Race implements java.io.Serializable{
         ArrayList<Integer> riderIDs = new ArrayList<Integer>();
         ArrayList<LocalTime> riderTimes = new ArrayList<LocalTime>();
         ArrayList<Integer> ridersPts = new ArrayList<Integer>();
+        //fills three arrays with IDs and corresponding total adjusted times and total mountain points for all stages
         for (Stage stage: stages){
             LocalTime[] stageTimes = stage.getAdjustedTimesInTimeOrder();
             int[] stagePts = stage.getMountainPointsInTimeOrder();
@@ -385,7 +391,7 @@ public class Race implements java.io.Serializable{
         //converts Arraylists into arrays to be sorted
         Integer[] arrayPts = ridersPts.toArray(new Integer[riderIDs.size()]);
         LocalTime[] arrayTimes = riderTimes.toArray(new LocalTime[riderTimes.size()]);
-        //sorts arrayIDs to be in order of arrayPts desc
+        //sorts total mountain points to be in order of total adjusted elapsed times
         Boolean sorting = true;
         while (sorting){
             sorting = false;
