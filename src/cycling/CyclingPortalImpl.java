@@ -590,7 +590,7 @@ public class CyclingPortalImpl implements CyclingPortal {
 		}
 		throw new NameNotRecognisedException("Race not found");//throw exception if race wasn't found under the name specified
 	}
-
+	
 	@Override
 	public LocalTime[] getGeneralClassificationTimesInRace(int raceId) throws IDNotRecognisedException {
 		for (Race race : races) {

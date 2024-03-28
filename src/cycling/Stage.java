@@ -172,6 +172,10 @@ public class Stage implements java.io.Serializable{
         stageTimes = sortBasedOnElapsedForTimes(stageTimes);
         return stageTimes;
     }
+    /** 
+     * Gets the get Adjusted Times In TimeOrder
+     * @return array of times
+     */
     public LocalTime[] getAdjustedTimesInTimeOrder(){
         LocalTime[] stageTimes = getTimesInTimeOrder();
         //adjusts times to take into account riders finishing close together
@@ -189,6 +193,10 @@ public class Stage implements java.io.Serializable{
         }
         return stageTimes;
     }
+    /** 
+     * Gets the Riders Adjusted Elapsed time
+     * @return array of times
+     */
     public LocalTime getRiderAdjustedElapsed(int inputID){
         //find position on regular leaderboard that is sorted by elapsed time
         int position = 0;
@@ -202,7 +210,10 @@ public class Stage implements java.io.Serializable{
         //use position to return elapsed time
         return getAdjustedTimesInTimeOrder()[position];
     }
-
+    /** 
+     * Gets the Points of all the riders In Time Order for the stage
+     * @return pointsAwarded
+     */
     public int[] getPointsInTimeOrder(){
         long[] checkPointTimes;//this will store the times each rider took to get to a specific checkpoint
         int[] points = new int[times.size()];//create array of points for each rider
@@ -251,6 +262,10 @@ public class Stage implements java.io.Serializable{
         //sort points by elapsed time and return
         return sortBasedOnElapsedTime(points);
     }
+    /** 
+     * Gets the get Mountain Points In TimeOrder
+     * @return pointsAwarded
+     */
     public int[] getMountainPointsInTimeOrder(){
         int[] points = new int[times.size()];
         Arrays.fill(points, 0);
@@ -374,7 +389,10 @@ public class Stage implements java.io.Serializable{
         }
         return inputArray;//return sorted array
     }
-
+    /**
+     * bubble sorts the array of rider points or rider ids on the elapsed time
+     * @param inputArray the array to sort
+     */
     private LocalTime[] sortBasedOnElapsedForTimes(LocalTime[] inputArray){
         int[] elapsedTimeSecondsList = new int[times.size()];
         int counter = 0;

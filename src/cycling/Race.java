@@ -98,7 +98,15 @@ public class Race implements java.io.Serializable{
     }
 
     // setters
+    /** 
+     * Sets the ID
+     * @param id the ID to set
+     */
     public void setName(String name) { this.name = name; }
+    /** 
+     * Sets the Description
+     * @param description the description to set
+     */
     public void setDescription(String description) { this.description = description; }
     /** 
      * adds a stage to the race
@@ -117,7 +125,10 @@ public class Race implements java.io.Serializable{
     } 
 
     
-
+    /**
+     * get point leaderboard
+     * @return array of rider IDs
+     */
     public int[] getPointLeaderboard(){
         ArrayList<Integer> riderIDs = new ArrayList<Integer>();
         ArrayList<Integer> riderPoints = new ArrayList<Integer>();
@@ -160,6 +171,10 @@ public class Race implements java.io.Serializable{
 
         return Arrays.stream(arrayIDs).mapToInt(Integer::intValue).toArray();
     }
+    /**
+     * get mountain point leaderboard
+     * @return array of rider IDs
+     */
     public int[] getMountainPointLeaderboard(){
         ArrayList<Integer> riderIDs = new ArrayList<Integer>();
         ArrayList<Integer> riderPoints = new ArrayList<Integer>();
@@ -202,6 +217,10 @@ public class Race implements java.io.Serializable{
 
         return Arrays.stream(arrayIDs).mapToInt(Integer::intValue).toArray();
     }
+    /**
+     * get time leaderboard
+     * @return array of rider IDs
+     */
     public int[] getStageAdjustedLeaderboard(){
         ArrayList<Integer> riderIDs = new ArrayList<Integer>();
         ArrayList<LocalTime> riderTimes = new ArrayList<LocalTime>();
@@ -243,6 +262,10 @@ public class Race implements java.io.Serializable{
 
         return Arrays.stream(arrayIDs).mapToInt(Integer::intValue).toArray();
     }
+    /**
+     * gets the Elapsed Times Sorted By Adjusted Times
+     * @return array of array of elapsed times 
+     */
     public LocalTime[] getElapsedTimesSortedByAdjustedTimes(){
         ArrayList<Integer> riderIDs = new ArrayList<Integer>();
         ArrayList<LocalTime> riderTimes = new ArrayList<LocalTime>();
@@ -333,6 +356,10 @@ public class Race implements java.io.Serializable{
 
         return Arrays.stream(arrayPts).mapToInt(Integer::intValue).toArray();
     }
+    /** 
+     * get the Riders Mountain Pts Sorted By Adjusted Times
+     * @return array of rider IDs
+     */
     public int[] getRidersMountainPtsSortedByAdjustedTimes(){
         ArrayList<Integer> riderIDs = new ArrayList<Integer>();
         ArrayList<LocalTime> riderTimes = new ArrayList<LocalTime>();
