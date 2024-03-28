@@ -207,6 +207,7 @@ public class Race implements java.io.Serializable{
                 {
                     riderIDs.add(ID);
                     riderTimes.add(stageTimes[riderIDs.indexOf(ID)]);
+                    elapsedTimes.add(stageElapsedTimes[riderIDs.indexOf(ID)]);
                 }
                 counter++;
             }
